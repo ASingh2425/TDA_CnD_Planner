@@ -1,0 +1,227 @@
+[
+  {
+    "url": "https://authjs.dev",
+    "status": 200,
+    "final": "https://authjs.dev/"
+  },
+  {
+    "url": "https://ui.shadcn.com",
+    "status": 200,
+    "final": "https://ui.shadcn.com/"
+  },
+  {
+    "url": "https://nextjs.org/learn",
+    "status": 200,
+    "final": "https://nextjs.org/learn"
+  },
+  {
+    "url": "https://tda-cnd26.vercel.app/",
+    "status": 200,
+    "final": "https://tda-cnd26.vercel.app/"
+  },
+  {
+    "url": "https://www.prisma.io/docs/getting-started",
+    "status": 200,
+    "final": "https://www.prisma.io/docs/getting-started"
+  },
+  {
+    "url": "https://git-scm.com/book/en/v2",
+    "status": 200,
+    "final": "https://git-scm.com/book/en/v2"
+  },
+  {
+    "url": "https://developer.mozilla.org/en-US/docs/Learn",
+    "status": 200,
+    "final": "https://developer.mozilla.org/en-US/docs/Learn_web_development"
+  },
+  {
+    "url": "https://javascript.info",
+    "status": 200,
+    "final": "https://javascript.info/"
+  },
+  {
+    "url": "https://usaco.guide/",
+    "status": 200,
+    "final": "https://usaco.guide/"
+  },
+  {
+    "url": "https://cs50.harvard.edu/x/",
+    "status": 200,
+    "final": "https://cs50.harvard.edu/x/"
+  },
+  {
+    "url": "https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial",
+    "status": 200,
+    "final": "https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorials/SVG_from_scratch"
+  },
+  {
+    "url": "https://leetcode.com/explore/",
+    "status": 403,
+    "final": "https://leetcode.com/explore/"
+  },
+  {
+    "url": "https://cp-algorithms.com/",
+    "status": 200,
+    "final": "https://cp-algorithms.com/"
+  },
+  {
+    "url": "https://visualgo.net/en",
+    "status": 200,
+    "final": "https://visualgo.net/en"
+  },
+  {
+    "url": "https://cses.fi/problemset/",
+    "status": 200,
+    "final": "https://cses.fi/problemset/"
+  },
+  {
+    "url": "https://reactflow.dev",
+    "status": 200,
+    "final": "https://reactflow.dev/"
+  },
+  {
+    "url": "https://wyag.thb.lt",
+    "status": 200,
+    "final": "https://wyag.thb.lt/"
+  },
+  {
+    "url": "https://craftinginterpreters.com",
+    "status": 200,
+    "final": "https://craftinginterpreters.com/"
+  },
+  {
+    "url": "https://15445.courses.cs.cmu.edu",
+    "status": 200,
+    "final": "https://15445.courses.cs.cmu.edu/fall2026/"
+  },
+  {
+    "url": "https://redis.io/docs/reference/protocol-spec/",
+    "status": 200,
+    "final": "https://redis.io/docs/latest/reference/protocol-spec/"
+  },
+  {
+    "url": "https://codeforces.com/apiHelp",
+    "status": 403,
+    "final": "https://codeforces.com/apiHelp"
+  },
+  {
+    "url": "https://owasp.org",
+    "status": 200,
+    "final": "https://owasp.org/"
+  },
+  {
+    "url": "https://www.w3.org/TR/WebCryptoAPI/",
+    "status": 200,
+    "final": "https://www.w3.org/TR/webcrypto/"
+  },
+  {
+    "url": "https://pdf-lib.js.org/",
+    "status": 200,
+    "final": "https://pdf-lib.js.org/"
+  },
+  {
+    "url": "https://upstash.com/docs/redis/overall",
+    "status": 200,
+    "final": "https://upstash.com/docs/redis/overall/getstarted"
+  },
+  {
+    "url": "https://recharts.org/",
+    "status": 200,
+    "final": "https://recharts.org/"
+  },
+  {
+    "url": "https://docs.docker.com/get-started/",
+    "status": 200,
+    "final": "https://docs.docker.com/get-started/"
+  },
+  {
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/WebSocket",
+    "status": 200,
+    "final": "https://developer.mozilla.org/en-US/docs/Web/API/WebSocket"
+  },
+  {
+    "url": "https://www.postgresql.org/docs/current/rules-materializedviews.html",
+    "status": 200,
+    "final": "https://www.postgresql.org/docs/current/rules-materializedviews.html"
+  },
+  {
+    "url": "https://github.com/pgvector/pgvector",
+    "status": 200,
+    "final": "https://github.com/pgvector/pgvector"
+  },
+  {
+    "url": "https://docs.github.com/en/pull-requests",
+    "status": 200,
+    "final": "https://docs.github.com/en/pull-requests"
+  },
+  {
+    "url": "https://nextra.site/",
+    "status": 200,
+    "final": "https://nextra.site/"
+  },
+  {
+    "url": "https://www.conventionalcommits.org",
+    "status": 200,
+    "final": "https://www.conventionalcommits.org/"
+  },
+  {
+    "url": "https://www.markdownguide.org/",
+    "status": 200,
+    "final": "https://www.markdownguide.org/"
+  },
+  {
+    "url": "https://vitest.dev/",
+    "status": 200,
+    "final": "https://vitest.dev/"
+  },
+  {
+    "url": "https://codeforces.com/problemset/problem/4/A",
+    "status": 403,
+    "final": "https://codeforces.com/problemset/problem/4/A"
+  },
+  {
+    "url": "https://react.dev/learn",
+    "status": 200,
+    "final": "https://react.dev/learn"
+  },
+  {
+    "url": "https://smartbear.com/learn/code-review/best-practices-for-peer-code-review/",
+    "status": 200,
+    "final": "https://smartbear.com/learn/code-review/best-practices-for-peer-code-review/"
+  },
+  {
+    "url": "https://github.com/ASingh2425/TDA_CnD_Planner",
+    "status": 200,
+    "final": "https://github.com/ASingh2425/TDA_CnD_Planner"
+  },
+  {
+    "url": "https://sqlbolt.com/",
+    "status": 200,
+    "final": "https://sqlbolt.com/"
+  },
+  {
+    "url": "https://cses.fi/problemset/task/1640",
+    "status": 200,
+    "final": "https://cses.fi/problemset/task/1640"
+  },
+  {
+    "url": "https://cses.fi/problemset/task/1646",
+    "status": 200,
+    "final": "https://cses.fi/problemset/task/1646"
+  },
+  {
+    "url": "https://cses.fi/problemset/task/1068",
+    "status": 200,
+    "final": "https://cses.fi/problemset/task/1068"
+  },
+  {
+    "url": "https://cses.fi/problemset/task/1633",
+    "status": 200,
+    "final": "https://cses.fi/problemset/task/1633"
+  },
+  {
+    "url": "https://codeforces.com/contests",
+    "status": 403,
+    "final": "https://codeforces.com/contests"
+  }
+]
