@@ -1,11 +1,9 @@
 # Product overview
 
-First-years start with Developer Foundations, then a concrete exercise. Second-years use task filters or project cards to find a scoped contribution. Reviewers inspect assigned submissions. Maintainers scope work, assign reviewers and resolve blockers.
+TDA is an open learning hub. Members can join at any time and explore any track without sign-up, permission checks or prerequisites enforced by the website.
 
-The six areas are Start Here, Learning Paths, Explore Tasks, Build with TDA, Competitive Programming and Maintainer Workspace. Homepage cards distinguish learning, application development, CP and contribution. Experienced members may demonstrate equivalent skills rather than repeat stages; this is a mentor decision, not automatic approval.
+Six sections: Start Here, Learning Paths, Explore Tasks, Build with TDA, Competitive Programming and Resources. Four tracks cover Developer Foundations, Software Development, Competitive Programming and Engineering Experiments. The original six learning stages, twelve initiatives and 48 milestones remain available.
 
-Each task contains prerequisites, skills, resources, steps, expected deliverable, acceptance criteria, effort and repository link. Members claim available tasks, mark work in progress, submit an HTTPS link, receive feedback and resubmit. Only the assigned reviewer with a reviewer/maintainer/admin role can approve. A reviewer cannot be the assignee.
+Tasks are self-directed practice briefs with resources, instructions, deliverables and success criteria. Members build in their own repositories and can share their work outside the hub. The website does not assign work, collect submissions, approve completion or track member activity.
 
-The six learning stages retain fundamentals/Git, HTML/CSS/DOM, React, databases/APIs, full-stack and first production contribution. Specialist engineering experiments are explicitly advanced. CP topics are ordered by prerequisites. Practice completions are self-reported and never claimed as verified platform data.
-
-The original initiatives remain proposed until a maintainer updates their actual state. No leads, members, submissions or achievements are fabricated. Release status is an explicit maintainer decision independent of checklist completion.
+The CP workspace contains canonical problem links and Bubble Sort/Binary Search demonstrations. There are no connected profiles or fabricated ratings. Public Resources replaces the maintainer workspace.

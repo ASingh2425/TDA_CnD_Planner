@@ -1,15 +1,11 @@
 # Deployment and rollback
 
-Do not assume the existing Vercel project is connected to this repository. Verify its Git provider, repository, production branch and Root Directory in the Vercel dashboard first. The cloned repository root is the application root; `hub` is only its local enclosing folder name.
+Use the existing GitHub repository with the Vercel Vite preset. Repository root is the application root; hub is only the local clone folder name.
 
-1. Review the feature branch / pull request. Keep main unchanged.
-2. Create a Supabase PREVIEW project. Apply 001_schema.sql, 002_catalog.sql, 003_prerequisites.sql in order.
-3. Configure Vercel preview variables listed in ENVIRONMENT.md. Framework: Vite; install: npm ci; build: npm run build; output: dist; Node: 22.x.
-4. Allow the preview origin in Supabase Auth redirects. Sign in as separate member, reviewer and maintainer accounts; follow TESTING.md. Never seed fictional users into production.
-5. Verify the preview at mobile/tablet/desktop sizes and check browser console errors. Verify deep links such as /#/task/first-contribution.
-6. With explicit production approval, apply migrations to the intended production database after a backup, configure production environment/auth URLs, merge and let the existing Vercel integration build.
-7. Verify the live URL and actual deployed commit before claiming deployment success.
+Install: npm ci. Build: npm run build. Output directory: dist. Node: 22.x. No environment variables, database migrations or authentication redirect configuration are needed.
 
-Rollback: redeploy the last known good Vercel deployment. Preserve the database and contribution history; never drop tables as a rollback shortcut. The original c92a8e9 commit remains available for restoring the static planner. Rolling back to it will not display new shared work, but must not destroy that work.
+Review the feature branch and preview before merging to main. Confirm the intended Vercel project, repository and production branch in the account dashboard. Production deployment is not performed by this local edit.
 
-No production deployment or Supabase migration has been performed by this change. Hosted integration and Vercel project binding require the account owner’s configuration.
+Verify all six sections and /#/task/first-contribution. Anyone should be able to open every track without an account. /#/maintainer opens the public Resources page for old bookmarks.
+
+Rollback through the previous Vercel deployment or a Git revert. Earlier Git commits contain the superseded account-based application; redeploying those would restore its UI, so choose the rollback deliberately.

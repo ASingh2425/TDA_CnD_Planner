@@ -23,27 +23,6 @@ export function Ext({ url, children }: { url: string; children: ReactNode }) {
     <span>{children}</span>
   );
 }
-export type Assignment = {
-  task_id: string;
-  member_id: string;
-  reviewer_id: string | null;
-  blocker: string | null;
-};
-export type ProjectRow = {
-  id: string;
-  title: string;
-  description: string;
-  status: string;
-  lead: string | null;
-  version: number;
-};
-export function message(e: unknown) {
-  return e instanceof Error
-    ? e.message
-    : typeof e === "object" && e && "message" in e
-      ? String(e.message)
-      : "Something went wrong. Please try again.";
-}
 export function Title({
   eyebrow,
   title,

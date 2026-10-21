@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   ArrowUpRight,
@@ -13,19 +13,10 @@ import {
   Layers,
   Trophy,
 } from "lucide-react";
-import type { User } from "@supabase/supabase-js";
-import { db, rpc } from "./api";
-import { initiatives, tasks as catalog, repo, type Task } from "./data";
+import { initiatives, tasks as catalog, repo } from "./data";
 import { Learning, TaskList, TaskDetail, CP } from "./MemberPages";
-import {
-  Link,
-  Ext,
-  Title,
-  message,
-  type Assignment,
-  type ProjectRow,
-} from "./shared";
-import { Maintainer } from "./Maintainer";
+import { Link, Ext, Title } from "./shared";
+import { Resources } from "./Resources";
 import "./style.css";
 const nav = [
   ["home", "Start Here", House],
@@ -33,130 +24,21 @@ const nav = [
   ["tasks", "Explore Tasks", Compass],
   ["projects", "Build with TDA", FolderGit2],
   ["cp", "Competitive Programming", Trophy],
-  ["maintainer", "Maintainer Workspace", Layers],
+  ["resources", "Resources", Layers],
 ] as const;
 export function App() {
-  const [route, R] = useState(location.hash.slice(2) || "home"),
-    [tasks, Tasks] = useState<Task[]>(catalog),
-    [user, U] = useState<User | null>(null),
-    [role, Role] = useState(""),
-    [notice, N] = useState(""),
-    [loading, L] = useState(false),
-    [assignments, A] = useState<Assignment[]>([]),
-    [auth, Auth] = useState(false),
-    [busy, B] = useState(false);
-  const [projectRows, PR] = useState<ProjectRow[]>([]);
+  const [route, R] = useState(location.hash.slice(2) || "home");
+  const tasks = catalog;
   useEffect(() => {
-    const fn = () => {
+    const navigate = () => {
       R(location.hash.slice(2) || "home");
       window.scrollTo(0, 0);
     };
-    window.addEventListener("hashchange", fn);
-    const sub = db?.auth.onAuthStateChange((_event, session) =>
-      U(session?.user ?? null),
-    );
-    return () => {
-      window.removeEventListener("hashchange", fn);
-      sub?.data.subscription.unsubscribe();
-    };
+    window.addEventListener("hashchange", navigate);
+    return () => window.removeEventListener("hashchange", navigate);
   }, []);
-  const modalRef = useRef<HTMLElement>(null);
-  useEffect(() => {
-    if (!auth) return;
-    const previous = document.activeElement as HTMLElement;
-    const handler = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        Auth(false);
-        return;
-      }
-      if (event.key === "Tab") {
-        const items = modalRef.current?.querySelectorAll<HTMLElement>(
-          "button:not(:disabled),input,textarea,a[href]",
-        );
-        if (!items?.length) return;
-        const first = items[0],
-          last = items[items.length - 1];
-        if (event.shiftKey && document.activeElement === first) {
-          event.preventDefault();
-          last.focus();
-        } else if (!event.shiftKey && document.activeElement === last) {
-          event.preventDefault();
-          first.focus();
-        }
-      }
-    };
-    document.addEventListener("keydown", handler);
-    return () => {
-      document.removeEventListener("keydown", handler);
-      previous?.focus();
-    };
-  }, [auth]);
-  async function refresh() {
-    if (!db) return;
-    L(true);
-    try {
-      const result = await db.from("tasks").select("*").order("created_at");
-      if (result.error) throw result.error;
-      Tasks(result.data as Task[]);
-      const projects = await db.from("initiatives").select("*");
-      if (projects.error) throw projects.error;
-      PR(projects.data);
-      if (user) {
-        const [r, a] = await Promise.all([
-          db.from("roles").select("role").eq("user_id", user.id).maybeSingle(),
-          db.from("assignments").select("*"),
-        ]);
-        if (r.error || a.error) throw r.error || a.error;
-        Role(r.data?.role ?? "");
-        A(a.data ?? []);
-      } else {
-        Role("");
-        A([]);
-      }
-    } catch (e) {
-      N(message(e));
-    } finally {
-      L(false);
-    }
-  }
-  useEffect(() => {
-    void refresh();
-  }, [user]);
-  async function act(
-    task: Task,
-    action: string,
-    value = "",
-    member: string | null = null,
-    reviewer: string | null = null,
-  ) {
-    B(true);
-    N("");
-    try {
-      await rpc("task_action", {
-        p_task: task.id,
-        p_version: task.version,
-        p_action: action,
-        p_value: value,
-        p_member: member,
-        p_reviewer: reviewer,
-      });
-      await refresh();
-      N("Saved to the shared workspace.");
-    } catch (e) {
-      N(message(e));
-    } finally {
-      B(false);
-    }
-  }
   const [page, param] = route.split("?")[0].split("/");
-  const mine = tasks.filter((t) =>
-    assignments.some((a) => a.task_id === t.id && a.member_id === user?.id),
-  );
-  const recommended =
-    mine.find((t) => t.status === "Changes Requested") ??
-    mine.find((t) => t.status !== "Approved") ??
-    tasks.find((t) => t.id === "first-contribution") ??
-    tasks[0];
+  const recommended = tasks[0];
   return (
     <div className="shell">
       <a
@@ -212,30 +94,15 @@ export function App() {
             <span className="slash">/</span>
             {nav.find((n) => n[0] === page)?.[1] ?? "Task details"}
           </div>
-          <button className="secondary small" onClick={() => Auth(true)}>
-            {user ? "Your account" : "Member sign in"}
-            <ArrowUpRight size={14} />
-          </button>
+          <Link to="learn" className="button secondary small">
+            Explore all tracks <ArrowUpRight size={14} />
+          </Link>
         </header>
         <main id="main" tabIndex={-1}>
           <div className="mode">
             <span className="dot" />
-            {db ? "Shared workspace connected" : "Public learning hub"}
-            <span>
-              {db
-                ? "Learn together. Build together."
-                : "Browse freely · Sign-in setup pending"}
-            </span>
+            Open learning hub<span>All tracks · Open to everyone</span>
           </div>
-          {notice && (
-            <div role="status" className="notice">
-              {notice}
-              <button className="text-button" onClick={() => N("")}>
-                Dismiss
-              </button>
-            </div>
-          )}
-          {loading && <p role="status">Loading shared workspace…</p>}
           {page === "home" && (
             <>
               <div className="hero">
@@ -349,7 +216,7 @@ export function App() {
                     <div className="chips">
                       <span>{recommended?.difficulty ?? "Beginner"}</span>
                       <span>{recommended?.effort ?? 2} hours</span>
-                      <span>Reviewable deliverable</span>
+                      <span>Practical exercise</span>
                     </div>
                     <Link
                       to={recommended ? `task/${recommended.id}` : "learn"}
@@ -370,8 +237,8 @@ export function App() {
                       "Learn",
                       "Pick a task",
                       "Build",
-                      "Submit",
-                      "Review",
+                      "Test",
+                      "Share",
                       "Improve",
                     ].map((s, i) => (
                       <span key={s}>
@@ -381,8 +248,8 @@ export function App() {
                     ))}
                   </div>
                   <p>
-                    Submit your work, get feedback from a reviewer, and make it
-                    better.
+                    Practice at your own pace, share what you build, and learn
+                    with the community.
                   </p>
                 </section>
               </div>
@@ -398,56 +265,28 @@ export function App() {
             />
           )}
           {page === "task" && (
-            <TaskDetail
-              key={param}
-              task={tasks.find((t) => t.id === param)}
-              assignment={assignments.find((a) => a.task_id === param)}
-              user={user}
-              role={role}
-              busy={busy}
-              act={act}
-              signIn={() => Auth(true)}
-            />
+            <TaskDetail key={param} task={tasks.find((t) => t.id === param)} />
           )}
           {page === "projects" && (
             <>
               <Title
                 eyebrow="BUILD SOMETHING THAT MATTERS"
                 title="Build with TDA."
-                text="Twelve initiatives. Plenty of ways to make a useful contribution. Status reflects planning until a maintainer updates it."
+                text="Twelve initiatives. Plenty of ways to make a useful contribution. Explore the ideas and choose what interests you."
               />
               <div className="project-grid">
-                {[
-                  ...initiatives,
-                  ...projectRows
-                    .filter((p) => !initiatives.some((i) => i.id === p.id))
-                    .map((p) => ({
-                      id: p.id,
-                      title: p.title,
-                      description: p.description,
-                      stack: [],
-                      resources: [],
-                      tasks: [],
-                      guidelines: [],
-                      track: "core",
-                      stage: "Proposed",
-                    })),
-                ].map((p, i) => {
-                  const live = projectRows.find((x) => x.id === p.id);
+                {initiatives.map((p, i) => {
                   return (
                     <article className="card" key={p.id}>
                       <div className="section-title">
                         <span className="project-number">
                           {String(i + 1).padStart(2, "0")}
                         </span>
-                        <span className="badge">
-                          {live?.status ?? "Proposed"}
-                        </span>
+                        <span className="badge">Proposed</span>
                       </div>
-                      <h2>{live?.title ?? p.title}</h2>
-                      <p>{live?.description ?? p.description}</p>
+                      <h2>{p.title}</h2>
+                      <p>{p.description}</p>
                       <p className="muted">
-                        Lead: {live?.lead ?? "Not assigned"} ·{" "}
                         {p.track === "labs" ? "Advanced" : "Mixed experience"}
                       </p>
                       <div className="chips">
@@ -477,22 +316,17 @@ export function App() {
               </div>
             </>
           )}
-          {page === "cp" && <CP user={user} notify={N} />}
-          {page === "maintainer" && (
-            <Maintainer
-              user={user}
-              role={role}
-              tasks={tasks}
-              projects={projectRows}
-              assignments={assignments}
-              refresh={refresh}
-              notify={N}
-              act={act}
-            />
-          )}
-          {!["home", "learn", "task", "projects", "cp", "maintainer"].includes(
-            page,
-          ) &&
+          {page === "cp" && <CP />}
+          {(page === "resources" || page === "maintainer") && <Resources />}
+          {![
+            "home",
+            "learn",
+            "task",
+            "projects",
+            "cp",
+            "maintainer",
+            "resources",
+          ].includes(page) &&
             !page.startsWith("tasks") && (
               <Title
                 eyebrow="PAGE NOT FOUND"
@@ -511,115 +345,6 @@ export function App() {
           </footer>
         </main>
       </div>
-      {auth && (
-        <div className="modal-backdrop">
-          <section
-            ref={modalRef}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="account-title"
-            className="modal"
-          >
-            <button
-              autoFocus
-              className="close secondary"
-              onClick={() => Auth(false)}
-            >
-              Close
-            </button>
-            <h2 id="account-title">Your TDA account</h2>
-            {!db ? (
-              <p>
-                Member sign-in will be available when the team connects
-                Supabase. You can explore every public learning path and task
-                now.
-              </p>
-            ) : user ? (
-              <>
-                <p>Signed in as {user.email}</p>
-                <p>
-                  Your member ID: <code>{user.id}</code>
-                </p>
-                <form
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    try {
-                      await rpc("save_profile", {
-                        p_name: new FormData(e.currentTarget).get("name"),
-                      });
-                      await refresh();
-                      N("Profile saved.");
-                      Auth(false);
-                    } catch (err) {
-                      N(message(err));
-                    }
-                  }}
-                >
-                  <label>
-                    Display name
-                    <input name="name" required maxLength={80} />
-                  </label>
-                  <button>Save profile</button>
-                </form>
-                <button
-                  className="secondary"
-                  onClick={() => {
-                    void db?.auth.signOut();
-                    Auth(false);
-                  }}
-                >
-                  Sign out
-                </button>
-                <h3>Your contribution history</h3>
-                {mine.length ? (
-                  mine.map((t) => (
-                    <p key={t.id}>
-                      <Link to={`task/${t.id}`}>{t.title}</Link> — {t.status}
-                    </p>
-                  ))
-                ) : (
-                  <p>
-                    No assignments yet. Save your profile, then choose an
-                    available task.
-                  </p>
-                )}
-              </>
-            ) : (
-              <form
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  B(true);
-                  const email = String(
-                    new FormData(e.currentTarget).get("email"),
-                  );
-                  const result = await db!.auth.signInWithOtp({
-                    email,
-                    options: { emailRedirectTo: location.origin },
-                  });
-                  N(
-                    result.error
-                      ? result.error.message
-                      : "Check your email for a sign-in link.",
-                  );
-                  B(false);
-                }}
-              >
-                <p>Use an email sign-in link. No password to remember.</p>
-                <label>
-                  Email
-                  <input
-                    name="email"
-                    type="email"
-                    required
-                    autoComplete="email"
-                  />
-                </label>
-                <button disabled={busy}>Send sign-in link</button>
-              </form>
-            )}
-          </section>
-        </div>
-      )}
     </div>
   );
 }

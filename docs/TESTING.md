@@ -1,28 +1,18 @@
-# Testing
+# Testing — open learning hub
 
-## Results from this implementation session
+Current verification after removing accounts and management features:
 
-- `npm run lint`: passed, no errors.
-- `npm run typecheck`: passed with strict TypeScript.
-- `npm test`: 20 tests passed across 2 files (Vitest 4.1.12).
-- `npm run test:e2e`: 10 tests passed across desktop/mobile Edge, including keyboard account-dialog checks.
-- `npm run build`: final production bundle passed (approximately 288 kB JavaScript / 90 kB gzip).
-- Dependency installation audit: zero vulnerabilities after updating Vitest to a patched version.
-- Desktop screenshot inspected; browser suite verifies horizontal overflow on all six sections on desktop and a mobile viewport.
-- External HTTP checks: see LINK_CHECKS.json. 45 links checked: 41 returned HTTP 200 and four returned HTTP 403 (Codeforces and LeetCode). Those four are unverified, not claimed broken or working. Links are retained rather than silently discarded.
+- npm run lint: passed.
+- npm run typecheck: passed.
+- npm test: 10 catalog/algorithm tests passed.
+- npm run test:e2e: 10 tests passed across desktop and mobile Edge.
+- npm run build: passed; approximately 275 kB JavaScript (86 kB gzip).
+- Dependency removal audit: zero vulnerabilities.
 
-The local sandbox blocks compiler/browser subprocess spawning. Build/test commands were rerun with explicit approved execution; no checks were disabled.
+Unit tests verify the 12 initiatives, 48 milestones, six learning stages, unique task IDs and algorithm behavior including empty, duplicate, sorted and absent-target cases.
 
-## Automated coverage
+Browser tests verify four homepage entry points, task search/empty/reset states, task instructions and criteria, visualizer controls/errors, all learning tracks, public resource search, absence of account/management controls and horizontal overflow. The old maintainer URL opens Resources. The entry-point test captures browser page errors. Desktop/mobile screenshots are generated in ignored test-results/.
 
-Catalog: original counts, unique task IDs, project references, concrete criteria. Algorithms: sorting order, immutable input, empty/single/duplicate/already-sorted arrays, absent and present search targets. Database: actual migration and seed execution using PGlite PostgreSQL, RLS private reads, forbidden direct writes, role escalation, exclusive claims/stale versions, self-review, blocked/resume, URL validation, feedback/resubmission/approval, immutable audit, stale metadata edits, prerequisite cycles and reviewer assignment after submission.
+Database and authenticated workflow tests were removed because those features were removed, not because failures were suppressed. There is no hosted authentication or persistence to configure/test. Historical results for the previous backend are available in Git history and do not describe the current app.
 
-PGlite creates synthetic auth.users and auth.uid ONLY in its in-memory test database. Fixture users and test submissions are never seeded into Supabase. Hosted Supabase Auth, JWT signature verification, email delivery, PostgREST configuration and real network races are not emulated by these tests.
-
-Playwright uses installed Microsoft Edge; CI installs it. It checks homepage routing, task search and empty state, task deliverables, algorithm controls and invalid input, maintainer lock state, no horizontal overflow and dialog Escape. The entry-point test fails on browser page errors. This is public-mode E2E, not a passing claim for authenticated hosted workflows.
-
-## Required hosted preview smoke test
-
-Use separate real preview accounts for a member, reviewer, unrelated member and maintainer. Save profiles, grant roles through trusted SQL, claim the same task from two browsers, check the loser sees a conflict, assign a reviewer, submit a valid link, request changes, resubmit and approve. Attempt direct data writes and private submission reads as the unrelated member. Refresh/sign in again and verify task state, reviews and contribution history persist. Confirm profile/role ownership and no elevated metadata in user-controlled fields.
-
-Verify edit/archive/initiative/prerequisite forms, blocked queue and JSON export against the preview database. Confirm sign-in redirects, expired tokens, offline requests and revoked roles. Check focus and form labels manually; test Safari/Firefox separately. Run production build and test its output on the Vercel preview, not only the Vite development server.
+The earlier external-link audit remains in LINK_CHECKS.json: 41 of 45 returned HTTP 200; four Codeforces/LeetCode links returned 403 and remain unverified. External sites may impose their own sign-in requirements. Safari/Firefox and real-member usability testing remain optional further checks.

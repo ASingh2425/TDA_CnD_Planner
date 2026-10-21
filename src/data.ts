@@ -7,15 +7,6 @@ export const tracks = [
   "Competitive Programming",
   "Engineering Experiments",
 ];
-export const statuses = [
-  "Available",
-  "Assigned",
-  "In Progress",
-  "Submitted for Review",
-  "Changes Requested",
-  "Approved",
-  "Blocked",
-];
 export type Task = {
   id: string;
   title: string;
@@ -29,13 +20,8 @@ export type Task = {
   criteria: string[];
   deliverable: string;
   effort: number;
-  status: string;
-  version: number;
-  archived: boolean;
   resources: { name: string; url: string }[];
   repository_url: string;
-  created_at?: string;
-  updated_at?: string;
 };
 const starter = [
   [
@@ -198,21 +184,18 @@ export const tasks: Task[] = starter.map(
         : `Comfort with ${skill.toLowerCase()}; demonstrate these skills before starting.`,
     instructions: [
       "Read the linked resources and inspect the existing project.",
-      "Agree on a small scope with your reviewer before implementation.",
+      "Choose a small scope that you can build and test independently.",
       "Build the deliverable, test the edge cases and document how to reproduce it.",
-      "Submit a repository or pull request link with a short explanation.",
+      "Document your result in your repository and share what you learned.",
     ],
     criteria: [
       "The deliverable meets the task description.",
       "Setup and verification steps are reproducible.",
       "The work handles errors and contains no secrets.",
-      "An assigned reviewer has reviewed the evidence.",
+      "You can demonstrate the result and explain your design choices.",
     ],
     deliverable,
     effort,
-    status: "Available",
-    version: 0,
-    archived: false,
     resources: initiatives[t === 0 ? 1 : t === 2 ? 2 : 0].resources.filter(
       (r) => r.url.startsWith("https:"),
     ),

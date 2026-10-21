@@ -59,7 +59,7 @@ test("visualizer handles steps reset and input errors", async ({ page }) => {
   await page.getByLabel("Values (up to").fill("bad");
   await expect(page.getByRole("alert")).toContainText("Enter 1–20");
 });
-test("no page overflow; maintainer actions are unavailable publicly", async ({
+test("public pages have no account or management controls", async ({
   page,
 }) => {
   for (const route of [
@@ -68,7 +68,8 @@ test("no page overflow; maintainer actions are unavailable publicly", async ({
     "tasks",
     "projects",
     "cp",
-    "maintainer",
+    "resources",
+    "task/first-contribution",
   ]) {
     await page.goto("/#/" + route);
     expect(
@@ -76,21 +77,40 @@ test("no page overflow; maintainer actions are unavailable publicly", async ({
         () => document.documentElement.scrollWidth <= innerWidth,
       ),
     ).toBe(true);
+    await expect(
+      page.getByRole("button", {
+        name: /sign in|sign up|approve|assign|submit for review|create task/i,
+      }),
+    ).toHaveCount(0);
+    await expect(
+      page.getByRole("link", { name: "Maintainer Workspace" }),
+    ).toHaveCount(0);
   }
-  await expect(page.getByText("Authorized access required")).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "Create task", exact: true }),
-  ).toHaveCount(0);
   await page.goto("/");
   await page.screenshot({
     path: `test-results/home-${test.info().project.name}.png`,
     fullPage: true,
   });
 });
-test("account dialog supports keyboard exit", async ({ page }) => {
-  await page.goto("/");
-  await page.getByRole("button", { name: "Member sign in" }).click();
-  await expect(page.getByRole("dialog")).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(page.getByRole("dialog")).toHaveCount(0);
+test("all learning tracks and resources are open", async ({ page }) => {
+  await page.goto("/#/learn");
+  for (const name of [
+    "Developer Foundations",
+    "Software Development",
+    "Competitive Programming",
+    "Engineering Experiments",
+  ]) {
+    await page.getByRole("button", { name, exact: true }).click();
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+  }
+  await page.goto("/#/resources");
+  await expect(
+    page.getByRole("heading", { name: "Resources for every path." }),
+  ).toBeVisible();
+  await page.getByLabel("Search resources").fill("no such resource");
+  await expect(page.getByRole("status")).toContainText("No matching resources");
+  await page.goto("/#/maintainer");
+  await expect(
+    page.getByRole("heading", { name: "Resources for every path." }),
+  ).toBeVisible();
 });

@@ -1,18 +1,15 @@
 import { useEffect, useState } from "react";
-import type { User } from "@supabase/supabase-js";
-import { ArrowRight, ArrowUpRight, Compass, LockKeyhole } from "lucide-react";
-import { db, rpc } from "./api";
+import { ArrowRight, ArrowUpRight, Compass } from "lucide-react";
 import {
   initiatives,
   tracks,
   stages,
   topics,
   problems,
-  statuses,
   type Task,
 } from "./data";
 import { Visualizer } from "./Visualizer";
-import { Link, Ext, Title, message, type Assignment } from "./shared";
+import { Link, Ext, Title } from "./shared";
 export function Learning({ selected }: { selected: number }) {
   const [track, S] = useState(selected);
   return (
@@ -20,7 +17,7 @@ export function Learning({ selected }: { selected: number }) {
       <Title
         eyebrow="A PATH, NOT A PREREQUISITE WALL"
         title="Learn with a purpose."
-        text="Choose a track. Build something tangible. Already know a stage? Show your reviewer an equivalent project and move ahead."
+        text="Choose a track. Build something tangible. Already know a stage? Move ahead to the skills you want to learn."
       />
       <div className="track-tabs">
         {tracks.map((t, i) => (
@@ -51,7 +48,8 @@ export function Learning({ selected }: { selected: number }) {
                 </p>
                 <p>
                   <b>Completion criteria:</b> Demonstrate the working result,
-                  explain your choices and address reviewer feedback.
+                  explain your choices and check your result against the
+                  exercise criteria.
                 </p>
                 <Ext url={s.resource}>Learning resource</Ext>
                 <p>
@@ -60,7 +58,7 @@ export function Learning({ selected }: { selected: number }) {
                 <small>
                   Next:{" "}
                   {stages[i + 1]?.title ??
-                    "Choose a project contribution and join a review cycle."}
+                    "Choose a project idea and build something useful."}
                 </small>
               </div>
             </article>
@@ -89,8 +87,8 @@ export function Learning({ selected }: { selected: number }) {
             </p>
             <p>
               Deliver a reproducible prototype, benchmark or tool with a problem
-              statement, methodology, tests and limitations. Complete a mentor
-              review before proposing production use.
+              statement, methodology, tests and limitations. Document what works
+              and what still needs improvement.
             </p>
             <Ext url="https://craftinginterpreters.com">
               Build-from-scratch resource
@@ -115,7 +113,6 @@ export function TaskList({
     [track, T] = useState(initial),
     [difficulty, D] = useState(""),
     [skill, S] = useState(""),
-    [status, Status] = useState(""),
     [effort, E] = useState(""),
     [project, P] = useState(
       new URLSearchParams(location.hash.split("?")[1]).get("project") ?? "",
@@ -126,7 +123,6 @@ export function TaskList({
   }, [initial, location.hash]);
   const filtered = tasks.filter(
     (t) =>
-      !t.archived &&
       (!q ||
         `${t.title} ${t.description}`
           .toLowerCase()
@@ -134,7 +130,6 @@ export function TaskList({
       (!track || t.track === track) &&
       (!difficulty || t.difficulty === difficulty) &&
       (!skill || t.skills.includes(skill)) &&
-      (!status || t.status === status) &&
       (!effort || t.effort <= Number(effort)) &&
       (!project || t.initiative_id === project),
   );
@@ -143,7 +138,7 @@ export function TaskList({
       <Title
         eyebrow="ONE MANAGEABLE PIECE OF WORK"
         title="Find your next task."
-        text="Every task has a purpose, a concrete deliverable and a review step. Find something that fits where you are."
+        text="Every task has a purpose and a concrete deliverable. Pick any exercise that fits your interests."
       />
       <div className="filters card">
         <label className="search-label">
@@ -163,7 +158,6 @@ export function TaskList({
             ["Beginner", "Intermediate", "Advanced"],
           ],
           ["Skill", skill, S, [...new Set(tasks.flatMap((t) => t.skills))]],
-          ["Status", status, Status, statuses],
           ["Effort", effort, E, ["2", "4", "8", "12"]],
         ].map(([label, value, set, options]) => (
           <label key={label as string}>
@@ -199,7 +193,6 @@ export function TaskList({
             T("");
             D("");
             S("");
-            Status("");
             E("");
             P("");
           }}
@@ -207,10 +200,7 @@ export function TaskList({
           Clear filters
         </button>
       </div>
-      <p className="muted">
-        {filtered.length} tasks
-        {!db ? " · Public task catalog; shared assignment setup pending" : ""}
-      </p>
+      <p className="muted">{filtered.length} tasks · Open practice catalog</p>
       <div className="project-grid">
         {filtered.map((t) => (
           <Link className="card task-card" to={`task/${t.id}`} key={t.id}>
@@ -226,7 +216,7 @@ export function TaskList({
               ))}
             </div>
             <div className="card-link">
-              <span>{t.status}</span>
+              <span>Explore task</span>
               <ArrowUpRight size={18} />
             </div>
           </Link>
@@ -237,243 +227,77 @@ export function TaskList({
           <Compass />
           <h2>No matching tasks yet.</h2>
           <p>
-            Try fewer filters or explore the learning paths while a maintainer
-            scopes new work.
+            Try fewer filters or explore the learning paths to find another
+            exercise.
           </p>
         </div>
       )}
     </>
   );
 }
-export function TaskDetail({
-  task: t,
-  assignment: a,
-  user,
-  role,
-  busy,
-  act,
-  signIn,
-}: {
-  task?: Task;
-  assignment?: Assignment;
-  user: User | null;
-  role: string;
-  busy: boolean;
-  act: (t: Task, a: string, v?: string) => Promise<void>;
-  signIn: () => void;
-}) {
-  const [value, V] = useState(""),
-    [history, H] = useState<
-      {
-        url?: string;
-        decision?: string;
-        feedback?: string;
-        created_at: string;
-      }[]
-    >([]),
-    [error, E] = useState("");
-  useEffect(() => {
-    if (!db || !t || !user) return;
-    void (async () => {
-      const s = await db
-        .from("submissions")
-        .select("*")
-        .eq("task_id", t.id)
-        .order("created_at");
-      if (s.error) {
-        E(s.error.message);
-        return;
-      }
-      const r = await db
-        .from("reviews")
-        .select("*")
-        .in(
-          "submission_id",
-          s.data.map((x) => x.id),
-        );
-      if (r.error) {
-        E(r.error.message);
-        return;
-      }
-      H(
-        [...s.data, ...r.data].sort((a, b) =>
-          a.created_at.localeCompare(b.created_at),
-        ),
-      );
-    })();
-  }, [t?.version, user]);
+export function TaskDetail({ task: t }: { task?: Task }) {
   if (!t)
     return (
       <Title
         eyebrow="TASK NOT FOUND"
         title="This task is unavailable."
-        text="Return to Explore Tasks to choose another."
+        text="Explore the task catalog to find something to build."
       />
     );
   return (
     <>
       <Link to="tasks">← All tasks</Link>
       <Title
-        eyebrow={`${t.track} / ${t.difficulty} / ${t.effort} HOURS`}
+        eyebrow={t.track + " / " + t.difficulty + " / " + t.effort + " HOURS"}
         title={t.title}
         text={t.description}
       />
       <div className="detail-grid">
-        <div>
-          <section className="card">
-            <h2>What you’ll deliver</h2>
-            <p>{t.deliverable}</p>
-            <h3>Before you start</h3>
-            <p>{t.prerequisites}</p>
-            <div className="chips">
-              {t.skills.map((s) => (
-                <span key={s}>{s}</span>
-              ))}
-            </div>
-            <h3>Step by step</h3>
-            <ol>
-              {t.instructions.map((s) => (
-                <li key={s}>{s}</li>
-              ))}
-            </ol>
-            <h3>What success looks like</h3>
-            <ul>
-              {t.criteria.map((s) => (
-                <li key={s}>{s}</li>
-              ))}
-            </ul>
-            <h3>Useful resources</h3>
-            {t.resources.map((r) => (
-              <p key={r.url}>
-                <Ext url={r.url}>{r.name}</Ext>
-              </p>
+        <section className="card">
+          <h2>What you’ll deliver</h2>
+          <p>{t.deliverable}</p>
+          <h3>Before you start</h3>
+          <p>{t.prerequisites}</p>
+          <div className="chips">
+            {t.skills.map((s) => (
+              <span key={s}>{s}</span>
             ))}
-            <Ext url={t.repository_url}>Project repository</Ext>
-          </section>
-          <section className="card">
-            <h2>Submissions & feedback</h2>
-            {error && <p role="alert">{error}</p>}
-            {history.length ? (
-              history.map((h, i) => (
-                <article className="history" key={i}>
-                  <small>{new Date(h.created_at).toLocaleString()}</small>
-                  {h.url ? (
-                    <p>
-                      <Ext url={h.url}>Submitted work</Ext>
-                    </p>
-                  ) : (
-                    <p>
-                      <b>{h.decision}</b> — {h.feedback}
-                    </p>
-                  )}
-                </article>
-              ))
-            ) : (
-              <p>
-                No submissions visible. The member and assigned reviewer can see
-                their work here.
-              </p>
-            )}
-          </section>
-        </div>
-        <section className="card task-actions">
-          <span className="badge">{t.status}</span>
-          <h3>Build → Submit → Review</h3>
-          <p>
-            Submit an HTTPS repository or pull request link. Your assigned
-            reviewer checks the deliverable and leaves feedback. Approval
-            requires a review.
-          </p>
-          <p>Assignee: {a?.member_id ?? "Not assigned / not visible"}</p>
-          <p>Reviewer: {a?.reviewer_id ?? "Awaiting maintainer assignment"}</p>
-          {a?.blocker && <p className="notice">Blocker: {a.blocker}</p>}
-          {!db ? (
-            <p className="notice">
-              Shared task actions become available after the team configures
-              Supabase. You can use the instructions to practice now.
+          </div>
+          <h3>Step by step</h3>
+          <ol>
+            {t.instructions.map((s) => (
+              <li key={s}>{s}</li>
+            ))}
+          </ol>
+          <h3>What success looks like</h3>
+          <ul>
+            {t.criteria.map((s) => (
+              <li key={s}>{s}</li>
+            ))}
+          </ul>
+          <h3>Useful resources</h3>
+          {t.resources.map((r) => (
+            <p key={r.url}>
+              <Ext url={r.url}>{r.name}</Ext>
             </p>
-          ) : !user ? (
-            <button onClick={signIn}>Sign in to start</button>
-          ) : (
-            <>
-              {t.status === "Available" && (
-                <button disabled={busy} onClick={() => void act(t, "claim")}>
-                  Start this task
-                </button>
-              )}
-              {a?.member_id === user.id && (
-                <>
-                  {["Assigned", "Blocked", "Changes Requested"].includes(
-                    t.status,
-                  ) && (
-                    <button
-                      disabled={busy}
-                      onClick={() => void act(t, "start")}
-                    >
-                      Mark in progress
-                    </button>
-                  )}
-                  {["In Progress", "Changes Requested", "Assigned"].includes(
-                    t.status,
-                  ) && (
-                    <>
-                      <label>
-                        Work link or blocker details
-                        <textarea
-                          value={value}
-                          onChange={(e) => V(e.target.value)}
-                          maxLength={5000}
-                        />
-                      </label>
-                      <div className="actions">
-                        {t.status !== "Assigned" && (
-                          <button
-                            disabled={busy || !/^https:\/\/\S+$/.test(value)}
-                            onClick={() => void act(t, "submit", value)}
-                          >
-                            Submit for review
-                          </button>
-                        )}
-                        <button
-                          disabled={busy || value.trim().length < 3}
-                          className="secondary"
-                          onClick={() => void act(t, "block", value)}
-                        >
-                          Record blocker & ask for help
-                        </button>
-                      </div>
-                    </>
-                  )}
-                </>
-              )}
-              {a?.reviewer_id === user.id &&
-                ["reviewer", "maintainer", "admin"].includes(role) &&
-                t.status === "Submitted for Review" && (
-                  <>
-                    <label>
-                      Reviewer feedback
-                      <textarea
-                        value={value}
-                        onChange={(e) => V(e.target.value)}
-                        maxLength={5000}
-                      />
-                    </label>
-                    <button
-                      disabled={busy || value.trim().length < 3}
-                      onClick={() => void act(t, "Changes Requested", value)}
-                    >
-                      Request changes
-                    </button>
-                    <button
-                      disabled={busy || value.trim().length < 3}
-                      onClick={() => void act(t, "Approved", value)}
-                    >
-                      Approve submission
-                    </button>
-                  </>
-                )}
-            </>
-          )}
+          ))}
+          <Ext url={t.repository_url}>Project repository</Ext>
+        </section>
+        <section className="card task-actions">
+          <span className="badge">Open to everyone</span>
+          <h2>Start whenever you’re ready.</h2>
+          <p>
+            No account, assignment or approval is needed to explore this task.
+            Use the steps as a practical exercise and check your result against
+            the criteria.
+          </p>
+          <p>
+            Build in your own repository, test your work and share what you
+            learned with the TDA community.
+          </p>
+          <Link to="learn" className="button">
+            Explore learning tracks →
+          </Link>
         </section>
       </div>
     </>
@@ -507,32 +331,15 @@ function TopicRoadmap() {
     </div>
   );
 }
-export function CP({
-  user,
-  notify,
-}: {
-  user: User | null;
-  notify: (s: string) => void;
-}) {
+export function CP() {
   const [topic, T] = useState(""),
-    [difficulty, D] = useState(""),
-    [done, Done] = useState<string[]>([]);
-  useEffect(() => {
-    if (db && user)
-      void db
-        .from("problem_completions")
-        .select("problem_id")
-        .then((r) => {
-          if (r.error) notify(r.error.message);
-          else Done(r.data.map((p) => p.problem_id));
-        });
-  }, [user]);
+    [difficulty, D] = useState("");
   return (
     <>
       <Title
         eyebrow="THINK IT THROUGH. SOLVE IT YOUR WAY."
         title="Your problem-solving space."
-        text="Learn a pattern, try a problem, and understand why your solution works. Progress here is manually recorded, never inferred from a rating."
+        text="Learn a pattern, try a problem, and understand why your solution works. Choose any topic and practice at your own pace."
       />
       <Visualizer />
       <details className="card">
@@ -541,11 +348,7 @@ export function CP({
       </details>
       <div className="section-title">
         <h2>A small, purposeful problem set</h2>
-        <span className="muted">
-          {user
-            ? `${done.length} manually recorded solutions`
-            : "Sign in to record your practice"}
-        </span>
+        <span className="muted">Practice freely at your own pace</span>
       </div>
       <div className="filters">
         <label>
@@ -580,36 +383,8 @@ export function CP({
                 <Ext url={p.url}>{p.title}</Ext>
                 <small>
                   {p.topic} · {p.difficulty}
-                  {done.includes(p.id) ? " · Manually recorded" : ""}
                 </small>
               </div>
-              {db && user && (
-                <form
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    try {
-                      await rpc("record_problem", {
-                        p_id: p.id,
-                        p_url: new FormData(e.currentTarget).get("url"),
-                      });
-                      Done([...new Set([...done, p.id])]);
-                      notify("Practice recorded (self-reported).");
-                    } catch (err) {
-                      notify(message(err));
-                    }
-                  }}
-                >
-                  <input
-                    name="url"
-                    aria-label={`${p.title} submission URL`}
-                    type="url"
-                    pattern="https://.*"
-                    placeholder="Accepted submission URL"
-                    required
-                  />
-                  <button className="secondary small">Record</button>
-                </form>
-              )}
             </div>
           ))}
       </div>
@@ -629,11 +404,10 @@ export function CP({
           </Link>
         </section>
         <section className="card">
-          <LockKeyhole />
-          <h2>Codeforces integration</h2>
+          <h2>Explore Codeforces</h2>
           <p>
-            Automatic profile sync is not configured. Ratings, solved counts and
-            leaderboard positions are not collected or displayed.
+            Find more problems and contests on Codeforces. This hub does not
+            collect profiles, ratings or submission history.
           </p>
           <Ext url="https://codeforces.com/apiHelp">
             Official API documentation

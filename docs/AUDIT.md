@@ -1,3 +1,7 @@
+# Scope update
+
+The initial audit below describes the repository and original implementation plan. The user subsequently requested an open learning-only hub. All authentication, database and maintainer operations have now been removed; see ARCHITECTURE.md for the current implementation.
+
 # Audit and implementation decisions
 
 ## Repository evidence

@@ -1,13 +1,9 @@
 # Architecture
 
-Browser: React 19, TypeScript, Vite 6, Lucide icons and plain responsive CSS. Hash routes allow direct links without server routing rules. src/main.tsx owns application navigation, session and data loading; MemberPages.tsx implements learning, task discovery/detail and CP; Maintainer.tsx, TaskEditor.tsx and ProjectEditor.tsx implement operational forms; Visualizer.tsx renders pure algorithm frames from algorithms.ts. data.ts defines public tasks and learning resources; initiatives.json preserves the original specifications.
+The current application is a static React/TypeScript/Vite website with hash routing, responsive CSS and Lucide icons. It has no authentication provider, API client, database, member profiles or administrative operations.
 
-Backend: Supabase Auth and PostgreSQL. The browser sends its authenticated JWT through supabase-js. SQL functions derive identity from auth.uid(), validate transitions and enforce roles. RLS protects private reads; direct operational writes are revoked. No client-controlled role field grants access. SECURITY DEFINER functions pin an empty search_path, use schema-qualified names and explicitly restrict execution grants.
+main.tsx owns navigation and the public homepage/project directory. MemberPages.tsx provides learning tracks, task discovery/detail and competitive programming. Resources.tsx offers public resource search and all original milestone definitions. Visualizer.tsx renders pure algorithm frames from algorithms.ts.
 
-Tasks have integer versions. task_action locks the row and checks the expected version, so concurrent claims or duplicate submissions cannot silently overwrite an update. Every workflow action is transactional and audited. Assignments enforce one current member per task. Reviews refer to immutable submissions; approval does not come from a checkbox.
+Public content lives in data.ts and initiatives.json. Search/filter and animation state is held only in memory. No personal progress or shared operational records are stored. All tracks and task instructions are available immediately, including advanced tracks; prerequisites describe recommended knowledge rather than permissions.
 
-Auth sessions are intentionally in memory (persistSession:false); a page reload may require signing in again. Shared data remains in PostgreSQL and is restored after sign-in from any browser. No operational data is written to localStorage. Magic-link redirects must be configured on the Supabase project.
-
-Public catalog mode works without a database. Configured database failures display an error; successful mutations reload server state. Retry a stale update only after refresh. Production quality requires the hosted authentication and cross-session smoke tests in TESTING.md.
-
-Reference: https://supabase.com/docs/guides/database/functions and https://supabase.com/docs/guides/database/postgres/row-level-security.
+The previous Supabase implementation was removed at the user's request. Its historical code is available in Git history, not in the current bundle. The old maintainer hash route resolves to the public Resources page.
