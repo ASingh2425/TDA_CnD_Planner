@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TDA Developer Platform & Tenure Resource Hub</title>
+  
+  <!-- Fonts: Plus Jakarta Sans for UI + Geist Mono for Code/Metrics -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Safe Tailwind CDN Loading with Runtime Guard -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    if (window.tailwind) {
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+              mono: ['"Geist Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+            },
+            colors: {
+              brand: {
+                50: '#eef2ff',
+                100: '#e0e7ff',
+                200: '#c7d2fe',
+                300: '#a5b4fc',
+                400: '#818cf8',
+                500: '#6366f1',
+                600: '#4f46e5',
+                700: '#4338ca',
+                800: '#3730a3',
+                900: '#312e81',
+                950: '#1e1b4b',
+              },
+              neutral: {
+                850: '#1c1c1f',
+                925: '#121215',
+                950: '#0a0a0d',
+              }
+            }
+          }
+        }
+      };
+    }
+  </script>
+
+  <style>
+    /* Ambient grid backdrop */
+    .bg-grid-pattern {
+      background-size: 32px 32px;
+      background-image: linear-gradient(to right, rgba(99, 102, 241, 0.05) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(99, 102, 241, 0.05) 1px, transparent 1px);
+    }
+    .dark .bg-grid-pattern {
+      background-image: linear-gradient(to right, rgba(99, 102, 241, 0.08) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(99, 102, 241, 0.08) 1px, transparent 1px);
+    }
+    /* Developer scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #27272a;
+    }
+    .dark ::-webkit-scrollbar-thumb:hover {
+      background: #3f3f46;
+    }
+    /* Tab transition engine */
+    .tab-panel {
+      display: none;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .tab-panel.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Interactive Card Glow Effect */
+    .glow-card {
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glow-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px -6px rgba(99, 102, 241, 0.12), 0 8px 12px -6px rgba(99, 102, 241, 0.06);
+    }
+    .dark .glow-card:hover {
+      box-shadow: 0 12px 30px -5px rgba(99, 102, 241, 0.2), 0 0 18px -2px rgba(129, 140, 248, 0.12);
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-neutral-950 dark:text-neutral-100 min-h-screen flex flex-col font-sans antialiased text-sm bg-grid-pattern relative selection:bg-brand-500 selection:text-white">
+
+  <!-- Ambient Glow Blobs -->
+  <div class="fixed top-0 left-1/4 w-96 h-96 bg-brand-500/10 dark:bg-brand-500/15 rounded-full blur-3xl pointer-events-none -z-10"></div>
+  <div class="fixed top-1/3 right-10 w-80 h-80 bg-emerald-500/10 dark:bg-emerald-500/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+  <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-neutral-800/80 bg-white/90 dark:bg-neutral-950/90 backdrop-blur-md shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-14 gap-4">
+        
+        <!-- Left: Brand / Tenure Info -->
+        <div class="flex items-center gap-3">
+          <a href="#" class="flex items-center gap-2.5 group">
+            <div class="h-8 w-8 rounded-lg bg-gradient-to-br from-brand-600 via-indigo-600 to-violet-700 flex items-center justify-center text-white font-mono font-bold text-xs shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
+              TDA
+            </div>
+            <div class="flex flex-col">
+              <div class="flex items-center gap-1.5 leading-none">
+                <span class="font-bold tracking-tight text-slate-900 dark:text-white text-sm">Developer Platform</span>
+                <span class="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-brand-50 text-brand-700 dark:bg-brand-950/70 dark:text-brand-300 font-semibold border border-brand-200/60 dark:border-brand-800/60">2026-27</span>
+              </div>
+              <span class="text-[11px] text-slate-500 dark:text-neutral-400 font-medium mt-0.5 hidden sm:inline">Tenure Execution Hub & Project Checklist</span>
+            </div>
+          </a>
+        </div>
+
+        <!-- Right: Developer Utilities & Live Progress -->
+        <div class="flex items-center gap-2.5">
+          <!-- Master Checklist Progress Pill -->
+          <div class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full border border-slate-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-xs shadow-xs">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span class="text-slate-500 dark:text-neutral-400 font-medium">Checklist:</span>
+            <span id="nav-checklist-stat" class="font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-1.5 py-0.5 rounded text-[11px]">0/48 Done</span>
+          </div>
+
+          <!-- Command Palette Trigger -->
+          <button onclick="toggleQuickSearch(true)" class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-neutral-800 bg-white/80 dark:bg-neutral-900/80 text-slate-600 hover:text-slate-900 dark:text-neutral-400 dark:hover:text-white hover:border-slate-300 dark:hover:border-neutral-700 transition text-xs shadow-xs">
+            <svg class="w-3.5 h-3.5 text-brand-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <span class="hidden md:inline font-medium">Quick find</span>
+            <kbd class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-neutral-800 border border-slate-200 dark:border-neutral-700 text-slate-500 dark:text-neutral-400 font-semibold shadow-2xs">⌘K</kbd>
+          </button>
+
+          <!-- Theme Toggle -->
+          <button id="theme-btn" class="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 dark:text-neutral-400 dark:hover:text-neutral-100 hover:bg-slate-100 dark:hover:bg-neutral-900 border border-slate-200/80 dark:border-neutral-800 transition" aria-label="Toggle visual theme">
+            <svg id="theme-sun" class="w-4 h-4 hidden text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+            <svg id="theme-moon" class="w-4 h-4 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab Navigation -->
+      <nav class="flex items-center space-x-1.5 overflow-x-auto py-2 border-t border-slate-200/80 dark:border-neutral-800/80 text-xs font-semibold no-scrollbar" id="tab-nav">
+        <button onclick="setTab('tab-checklist')" data-target="tab-checklist" class="nav-tab active px-3 py-1.5 rounded-lg text-brand-700 dark:text-brand-300 bg-brand-50 dark:bg-brand-950/80 border border-brand-200/80 dark:border-brand-800/80 whitespace-nowrap transition flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-brand-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          Master Project Checklist
+        </button>
+        <button onclick="setTab('tab-blueprint')" data-target="tab-blueprint" class="nav-tab px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 dark:text-neutral-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-neutral-900 whitespace-nowrap transition border border-transparent">
+          Tech Stack & Architecture
+        </button>
+        <button onclick="setTab('tab-junior')" data-target="tab-junior" class="nav-tab px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 dark:text-neutral-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-neutral-900 whitespace-nowrap transition border border-transparent">
+          Junior Path (S1–S6)
+        </button>
+        <button onclick="setTab('tab-visualizer')" data-target="tab-visualizer" class="nav-tab px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 dark:text-neutral-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-neutral-900 whitespace-nowrap transition border border-transparent">
+          Algorithm Engine
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- Top Architecture & Execution Banner -->
+    <section class="border border-slate-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 rounded-xl p-5 sm:p-6 shadow-xs relative overflow-hidden">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+        <div class="space-y-2 max-w-2xl">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="inline-flex items-center font-mono text-[10px] font-bold px-2 py-0.5 rounded-md bg-brand-50 text-brand-700 dark:bg-brand-950/70 dark:text-brand-300 border border-brand-200/80 dark:border-brand-800/80 uppercase tracking-wider">
+              TENURE ARCHITECTURE SPEC
+            </span>
+            <span class="inline-flex items-center gap-1.5 text-xs text-slate-500 dark:text-neutral-400 font-medium">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              One Monorepo Standard • Zero Isolated Repositories
+            </span>
+          </div>
+          <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+            TDA Developer Platform & Tenure Master Hub
+          </h1>
+          <p class="text-slate-600 dark:text-neutral-400 text-xs sm:text-sm leading-relaxed">
+            Consolidated roadmap of all 12 platform initiatives—from junior onboarding and problem curation to Codeforces syncing, certificates, and engineering labs.
+          </p>
+        </div>
+        
+        <!-- Proportional Progress Metric Card -->
+        <div class="p-4 rounded-xl border border-slate-200/90 dark:border-neutral-800 bg-slate-50/80 dark:bg-neutral-850/80 flex flex-col justify-center min-w-[240px] md:w-64 shrink-0 shadow-2xs space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-mono text-[10px] uppercase font-bold tracking-wider text-slate-500 dark:text-neutral-400">Total Completion</span>
+            <span class="text-base font-bold font-mono text-brand-600 dark:text-brand-400" id="global-progress-percent">0%</span>
+          </div>
+          <div class="w-full bg-slate-200 dark:bg-neutral-800 h-2 rounded-full overflow-hidden">
+            <div id="global-progress-bar" class="bg-gradient-to-r from-brand-600 to-emerald-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+          <div class="flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-neutral-400 pt-0.5">
+            <span id="global-progress-fraction">0 / 48 Tasks</span>
+            <span class="text-emerald-600 dark:text-emerald-400 font-semibold">Live Verification</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div id="tab-checklist" class="tab-panel active space-y-5">
+      
+      <!-- Unified Filter Bar & Search for Checklists -->
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200 dark:border-neutral-800 pb-4">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2.5">
+            <h2 class="text-base font-bold text-slate-900 dark:text-white">Tenure Master Checklist & Guidelines Directory</h2>
+            <span class="inline-flex items-center whitespace-nowrap text-[11px] font-mono px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-semibold">
+              12 Core Initiatives
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-neutral-400">Review guidelines, open official learning links, and check off milestone criteria across all projects.</p>
+        </div>
+        
+        <!-- Controls & Filters in a cohesive single-height row -->
+        <div class="flex flex-wrap sm:flex-nowrap items-center gap-2">
+          <div class="relative w-full sm:w-64">
+            <svg class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" id="checklist-search" oninput="filterChecklistProjects()" placeholder="Filter guidelines or stack..." class="w-full h-9 pl-8 pr-3 rounded-lg border border-slate-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 shadow-2xs">
+          </div>
+          <select id="checklist-category-filter" onchange="filterChecklistProjects()" class="h-9 px-3 rounded-lg border border-slate-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 shadow-2xs font-mono shrink-0">
+            <option value="all">All Tracks</option>
+            <option value="core">Core Platform</option>
+            <option value="foundation">Junior Foundation</option>
+            <option value="cp">CP & DSA System</option>
+            <option value="systems">Build-From-Scratch</option>
+            <option value="labs">Engineering Labs</option>
+            <option value="ops">Culture & Tooling</option>
+          </select>
+          <button onclick="resetChecklist()" class="h-9 px-3 rounded-lg border border-slate-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:bg-slate-100 dark:hover:bg-neutral-800 text-slate-600 dark:text-neutral-400 text-xs font-mono transition shrink-0">
+            Reset All
+          </button>
+        </div>
+      </div>
+
+      <!-- Priority & Guardrail Guidelines Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="p-4 rounded-xl border border-emerald-500/30 bg-emerald-50/50 dark:bg-emerald-950/20 space-y-2 flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+              <span class="font-bold text-[11px] text-emerald-900 dark:text-emerald-200 uppercase tracking-wider font-mono">PRIORITY FOCUS // TOP 5 PILLARS</span>
+            </div>
+            <p class="text-xs text-emerald-800 dark:text-emerald-300/90 leading-relaxed font-sans">
+              1. Junior Developer Program • 2. TDA Developer Portal MVP • 3. DSA Roadmap & Problem Bank • 4. GitHub Contribution Workflow • 5. Algorithm Visualizer.
+            </p>
+          </div>
+          <span class="text-[10px] font-mono text-emerald-700 dark:text-emerald-400">Target: Core production release before expanding scope.</span>
+        </div>
+
+        <div class="p-4 rounded-xl border border-amber-500/30 bg-amber-50/50 dark:bg-amber-950/20 space-y-2 flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span class="font-bold text-[11px] text-amber-900 dark:text-amber-200 uppercase tracking-wider font-mono">DEFERRED MODULES // LAB SANDBOX ONLY</span>
+            </div>
+            <p class="text-xs text-amber-800 dark:text-amber-300/90 leading-relaxed font-sans">
+              Postpone Kubernetes, custom online judge hosting, multi-platform scrapers, AI agents, full RAG, and WebRTC until the core portal is in production.
+            </p>
+          </div>
+          <span class="text-[10px] font-mono text-amber-700 dark:text-amber-400">Sandbox Rule: Confine experiments to isolated branches.</span>
+        </div>
+      </div>
+
+      <div id="checklist-projects-container" class="space-y-4">
+        <!-- Dynamically injected via JavaScript with state storage -->
+      </div>
+
+    </div>
+
+    <div id="tab-blueprint" class="tab-panel space-y-6">
+      
+      <!-- Architectural Rationale Alert -->
+      <div class="p-4 rounded-xl border border-brand-200 dark:border-brand-900/60 bg-gradient-to-r from-brand-50/70 to-indigo-50/30 dark:from-brand-950/40 dark:to-neutral-900 flex items-start gap-3.5">
+        <div class="p-2 rounded-lg bg-brand-500 text-white shrink-0 mt-0.5 shadow-xs">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        </div>
+        <div class="text-xs space-y-1">
+          <div class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <span>Tenure Principle: One Consistent Stack for Seamless Mobility</span>
+            <span class="font-mono text-[10px] px-2 py-0.5 rounded bg-brand-100 dark:bg-brand-900 text-brand-700 dark:text-brand-300 font-semibold">RULE-01</span>
+          </div>
+          <p class="text-slate-600 dark:text-neutral-300 leading-relaxed">
+            The official Next.js dashboard course aligns with this portal. It covers protected pages, databases, authentication, CRUD operations, searching, pagination, validation, and deployment. Avoid microservices or separate backends for MVP.
+          </p>
+        </div>
+      </div>
+
+      <!-- Standard Tech Stack Table -->
+      <div class="border border-slate-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 rounded-xl overflow-hidden shadow-xs">
+        <div class="p-4 border-b border-slate-200 dark:border-neutral-800">
+          <h3 class="font-bold text-sm text-slate-900 dark:text-white">Recommended Technical Stack Standards</h3>
+          <p class="text-xs text-slate-500 dark:text-neutral-400 mt-0.5">Strict baseline so juniors can move between projects without framework shock.</p>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs font-sans">
+            <thead class="bg-slate-50 dark:bg-neutral-850/80 font-mono text-[11px] text-slate-500 border-b border-slate-200 dark:border-neutral-800">
+              <tr>
+                <th class="py-2.5 px-4">Layer</th>
+                <th class="py-2.5 px-4">Standard Recommendation</th>
+                <th class="py-2.5 px-4">Why / Architectural Rationale</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 dark:divide-neutral-800/70">
+              <tr><td class="py-2.5 px-4 font-mono font-bold text-slate-900 dark:text-white">Language</td><td class="py-2.5 px-4 font-mono text-brand-600 dark:text-brand-400">TypeScript</td><td class="py-2.5 px-4 text-slate-600 dark:text-neutral-300">One language across frontend and backend; compile-time safety.</td></tr>
+              <tr><td class="py-2.5 px-4 font-mono font-bold text-slate-900 dark:text-white">Main Framework</td><td class="py-2.5 px-4 font-mono text-brand-600 dark:text-brand-400">Next.js App Router</td><td class="py-2.5 px-4 text-slate-600 dark:text-neutral-300">Frontend, backend API routes, server actions, and edge rendering in one.</td></tr>
+              <tr><td class="py-2.5 px-4 font-mono font-bold text-slate-900 dark:text-white">Styling & UI</td><td class="py-2.5 px-4 font-mono text-brand-600 dark:text-brand-400">Tailwind CSS + shadcn/ui</td><td class="py-2.5 px-4 text-slate-600 dark:text-neutral-300">Radix UI accessible primitives, copy-paste ownership, zero runtime overhead.</td></tr>
+              <tr><td class="py-2.5 px-4 font-mono font-bold text-slate-900 dark:text-white">Database & ORM</td><td class="py-2.5 px-4 font-mono text-brand-600 dark:text-brand-400">PostgreSQL + Prisma ORM</td><td class="py-2.5 px-4 text-slate-600 dark:text-neutral-300">Relational integrity, automated migrations, type-safe queries, connection pooling.</td></tr>
+              <tr><td class="py-2.5 px-4 font-mono font-bold text-slate-900 dark:text-white">Authentication</td><td class="py-2.5 px-4 font-mono text-brand-600 dark:text-brand-400">Auth.js v5 (NextAuth)</td><td class="py-2.5 px-4 text-slate-600 dark:text-neutral-300">GitHub OAuth, role-based session guarding (Public, Member, Contributor, Mentor, Admin).</td></tr>
+              <tr><td class="py-2.5 px-4 font-mono font-bold text-slate-900 dark:text-white">Validation</td><td class="py-2.5 px-4 font-mono text-brand-600 dark:text-brand-400">Zod</td><td class="py-2.5 px-4 text-slate-600 dark:text-neutral-300">Schema-driven input validation on both client forms and server actions.</td></tr>
+              <tr><td class="py-2.5 px-4 font-mono font-bold text-slate-900 dark:text-white">Testing</td><td class="py-2.5 px-4 font-mono text-brand-600 dark:text-brand-400">Vitest + Playwright</td><td class="py-2.5 px-4 text-slate-600 dark:text-neutral-300">Fast unit tests for logic + browser E2E for auth, registration, and certs.</td></tr>
+              <tr><td class="py-2.5 px-4 font-mono font-bold text-slate-900 dark:text-white">CI & Hosting</td><td class="py-2.5 px-4 font-mono text-brand-600 dark:text-brand-400">GitHub Actions + Vercel</td><td class="py-2.5 px-4 text-slate-600 dark:text-neutral-300">Automated PR checks (format, lint, type, test) + preview deployments.</td></tr>
+              <tr><td class="py-2.5 px-4 font-mono font-bold text-slate-900 dark:text-white">Certificates & Storage</td><td class="py-2.5 px-4 font-mono text-brand-600 dark:text-brand-400">PDF-Lib + Supabase Storage</td><td class="py-2.5 px-4 text-slate-600 dark:text-neutral-300">Tamper-evident UUID hash generation, PDF generation, public verification URL.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="tab-junior" class="tab-panel space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 dark:border-neutral-800 pb-3">
+        <div>
+          <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <span>Junior Developer Progression Pathway</span>
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">Stages 1 to 6</span>
+          </h2>
+          <p class="text-xs text-slate-500 dark:text-neutral-400">Do not let beginners start React before they understand variables, functions, asynchronous code, and DOM events.</p>
+        </div>
+        <span class="text-xs font-mono text-slate-500">Target: Zero Junior Dropoff</span>
+      </div>
+
+      <!-- Progression Stages Grid -->
+      <div class="space-y-4">
+        <!-- Stage 1 -->
+        <div class="p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 glow-card flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-1.5 max-w-xl">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">STAGE 01</span>
+              <h3 class="font-bold text-sm text-slate-900 dark:text-white">Developer & Programming Fundamentals</h3>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-neutral-300 leading-relaxed">
+              Variables, loops, memory pointers, CLI navigation, and Git fundamentals. Must master basic control flow before touching any framework.
+            </p>
+            <div class="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono">
+              <span class="text-slate-500">Core Resources:</span>
+              <a href="https://cs50.harvard.edu/x/" target="_blank" class="text-brand-600 dark:text-brand-400 hover:underline font-semibold">CS50x 2026</a>
+              <span class="text-slate-400">•</span>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide" target="_blank" class="text-brand-600 dark:text-brand-400 hover:underline font-semibold">MDN JS Guide</a>
+              <span class="text-slate-400">•</span>
+              <a href="https://git-scm.com/book/en/v2" target="_blank" class="text-brand-600 dark:text-brand-400 hover:underline font-semibold">Pro Git Book</a>
+            </div>
+          </div>
+          <div class="shrink-0 bg-slate-50 dark:bg-neutral-850 p-3 rounded-lg border border-slate-200 dark:border-neutral-800 text-xs font-mono min-w-[200px]">
+            <span class="text-slate-400 text-[10px] block">VERIFIABLE MILESTONE</span>
+            <span class="font-bold text-slate-900 dark:text-white block mt-0.5">CLI Task Manager (JSON)</span>
+            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 mt-1 block font-semibold">✓ Node.js FS + Git Branching</span>
+          </div>
+        </div>
+
+        <!-- Stage 2 -->
+        <div class="p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 glow-card flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-1.5 max-w-xl">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-50 text-cyan-700 dark:bg-cyan-950 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800">STAGE 02</span>
+              <h3 class="font-bold text-sm text-slate-900 dark:text-white">Web Fundamentals & The DOM</h3>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-neutral-300 leading-relaxed">
+              Semantic HTML5, CSS Flexbox/Grid, Responsive Box Model, DOM Events, and asynchronous JavaScript (Promises, async/await, Fetch API).
+            </p>
+            <div class="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono">
+              <span class="text-slate-500">Core Resources:</span>
+              <a href="https://developer.mozilla.org/en-US/docs/Learn" target="_blank" class="text-brand-600 dark:text-brand-400 hover:underline font-semibold">MDN Web Curriculum</a>
+              <span class="text-slate-400">•</span>
+              <a href="https://javascript.info" target="_blank" class="text-brand-600 dark:text-brand-400 hover:underline font-semibold">JavaScript.info</a>
+            </div>
+          </div>
+          <div class="shrink-0 bg-slate-50 dark:bg-neutral-850 p-3 rounded-lg border border-slate-200 dark:border-neutral-800 text-xs font-mono min-w-[200px]">
+            <span class="text-slate-400 text-[10px] block">VERIFIABLE MILESTONE</span>
+            <span class="font-bold text-slate-900 dark:text-white block mt-0.5">Developer Profile & Showcase</span>
+            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 mt-1 block font-semibold">✓ Pure Vanilla DOM + Fetch</span>
+          </div>
+        </div>
+
+        <!-- Stage 3 -->
+        <div class="p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 glow-card flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-1.5 max-w-xl">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">STAGE 03</span>
+              <h3 class="font-bold text-sm text-slate-900 dark:text-white">React & Component Architecture</h3>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-neutral-300 leading-relaxed">
+              Component lifecycle, immutable state updates, props contracts, custom hooks, effect sanitization, and Tailwind design integration.
+            </p>
+            <div class="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono">
+              <span class="text-slate-500">Core Resources:</span>
+              <a href="https://react.dev/learn/thinking-in-react" target="_blank" class="text-brand-600 dark:text-brand-400 hover:underline font-semibold">React.dev (Thinking in React)</a>
+              <span class="text-slate-400">•</span>
+              <a href="https://tailwindcss.com/docs" target="_blank" class="text-brand-600 dark:text-brand-400 hover:underline font-semibold">Tailwind Docs</a>
+            </div>
+          </div>
+          <div class="shrink-0 bg-slate-50 dark:bg-neutral-850 p-3 rounded-lg border border-slate-200 dark:border-neutral-800 text-xs font-mono min-w-[200px]">
+            <span class="text-slate-400 text-[10px] block">VERIFIABLE MILESTONE</span>
+            <span class="font-bold text-slate-900 dark:text-white block mt-0.5">Frontend Problem Bank Mock</span>
+            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 mt-1 block font-semibold">✓ Client-Side Filtering & Search</span>
+          </div>
+        </div>
+
+        <!-- Stage 4 -->
+        <div class="p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 glow-card flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-1.5 max-w-xl">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border border-amber-200 dark:border-amber-800">STAGE 04</span>
+              <h3 class="font-bold text-sm text-slate-900 dark:text-white">Databases, Relational Modeling & APIs</h3>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-neutral-300 leading-relaxed">
+              PostgreSQL relational constraints, indexes, 1:N and N:M associations, SQL query analysis, and Prisma schema generation.
+            </p>
+            <div class="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono">
+              <span class="text-slate-500">Core Resources:</span>
+              <a href="https://sqlbolt.com/" target="_blank" class="text-brand-600 dark:text-brand-400 hover:underline font-semibold">SQLBolt Interactive</a>
+              <span class="text-slate-400">•</span>
+              <a href="https://www.prisma.io/docs" target="_blank" class="text-brand-600 dark:text-brand-400 hover:underline font-semibold">Prisma Docs</a>
+            </div>
+          </div>
+          <div class="shrink-0 bg-slate-50 dark:bg-neutral-850 p-3 rounded-lg border border-slate-200 dark:border-neutral-800 text-xs font-mono min-w-[200px]">
+            <span class="text-slate-400 text-[10px] block">VERIFIABLE MILESTONE</span>
+            <span class="font-bold text-slate-900 dark:text-white block mt-0.5">Entity Relationship Model (ERD)</span>
+            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 mt-1 block font-semibold">✓ Prisma Migrations Tested</span>
+          </div>
+        </div>
+
+        <!-- Stage 5 -->
+        <div class="p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 glow-card flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-1.5 max-w-xl">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-violet-50 text-violet-700 dark:bg-violet-950 dark:text-violet-300 border border-violet-200 dark:border-violet-800">STAGE 05</span>
+              <h3 class="font-bold text-sm text-slate-900 dark:text-white">Full-Stack Next.js & Server Actions</h3>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-neutral-300 leading-relaxed">
+              App Router data fetching, authenticated routes, Zod server-side form validation, role-based protection, and optimistic UI updates.
+            </p>
+            <div class="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono">
+              <span class="text-slate-500">Core Resources:</span>
+              <a href="https://nextjs.org/learn" target="_blank" class="text-brand-600 dark:text-brand-400 hover:underline font-semibold">Next.js Dashboard Tutorial</a>
+              <span class="text-slate-400">•</span>
+              <a href="https://authjs.dev" target="_blank" class="text-brand-600 dark:text-brand-400 hover:underline font-semibold">Auth.js Guide</a>
+            </div>
+          </div>
+          <div class="shrink-0 bg-slate-50 dark:bg-neutral-850 p-3 rounded-lg border border-slate-200 dark:border-neutral-800 text-xs font-mono min-w-[200px]">
+            <span class="text-slate-400 text-[10px] block">VERIFIABLE MILESTONE</span>
+            <span class="font-bold text-slate-900 dark:text-white block mt-0.5">Protected CRUD Member Portal</span>
+            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 mt-1 block font-semibold">✓ Auth Guarded + Zod Form</span>
+          </div>
+        </div>
+
+        <!-- Stage 6 -->
+        <div class="p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 glow-card flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-1.5 max-w-xl">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border border-rose-200 dark:border-rose-800">STAGE 06</span>
+              <h3 class="font-bold text-sm text-slate-900 dark:text-white">Open-Source Production Contribution</h3>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-neutral-300 leading-relaxed">
+              Standard GitHub organization protocol: Issue assignment → feature branch → pull request → peer review → revision cycle → merge.
+            </p>
+            <div class="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono">
+              <span class="text-slate-500">Standard Branch Naming:</span>
+              <span class="text-brand-600 dark:text-brand-400">feature/member-profile</span>
+              <span class="text-slate-400">•</span>
+              <span class="text-brand-600 dark:text-brand-400">fix/cf-sync</span>
+            </div>
+          </div>
+          <div class="shrink-0 bg-slate-50 dark:bg-neutral-850 p-3 rounded-lg border border-slate-200 dark:border-neutral-800 text-xs font-mono min-w-[200px]">
+            <span class="text-slate-400 text-[10px] block">VERIFIABLE MILESTONE</span>
+            <span class="font-bold text-slate-900 dark:text-white block mt-0.5">Merged PR in TDA Monorepo</span>
+            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 mt-1 block font-semibold">✓ 1 Reviewer Approved + CI Passed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Algorithm Visualizer Panel -->
+    <div id="tab-visualizer" class="tab-panel space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 dark:border-neutral-800 pb-3">
+        <div>
+          <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <span>Algorithm Simulation Engine</span>
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 border border-brand-200/60 dark:border-brand-800/60">Live SVG State</span>
+          </h2>
+          <p class="text-xs text-slate-500 dark:text-neutral-400">Generator-based stepping separated from the rendering canvas. Watch comparisons and swaps in real time.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-mono text-slate-500">Mode:</span>
+          <span class="px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">Deterministic</span>
+        </div>
+      </div>
+
+      <div class="border border-slate-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 rounded-xl p-4 sm:p-5 space-y-4 shadow-sm">
+        
+        <!-- Controls Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/80 dark:border-neutral-800/80 pb-3.5">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-mono font-semibold text-slate-500 dark:text-neutral-400">ALGORITHM:</span>
+            <select id="visualizer-algo-choice" onchange="resetVisualizerState()" class="text-xs font-mono font-semibold px-3 py-1.5 rounded-lg border border-slate-200 dark:border-neutral-700 bg-slate-50 dark:bg-neutral-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 shadow-2xs">
+              <option value="bubble">Bubble Sort (O(N²))</option>
+              <option value="binary">Binary Search (O(log N))</option>
+            </select>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button id="algo-run-btn" onclick="togglePlayState()" class="px-4 py-1.5 rounded-lg bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white text-xs font-mono font-bold transition shadow-sm shadow-brand-500/20 flex items-center gap-1.5 active:scale-95">
+              <svg id="play-icon" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span id="algo-run-label">Play</span>
+            </button>
+            <button onclick="stepForwardSingle()" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-neutral-700 bg-slate-50 dark:bg-neutral-800 hover:bg-slate-100 dark:hover:bg-neutral-750 text-slate-700 dark:text-neutral-200 text-xs font-mono font-semibold transition active:scale-95 shadow-2xs">
+              Step →
+            </button>
+            <button onclick="resetVisualizerState()" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-neutral-700 bg-slate-50 dark:bg-neutral-800 hover:bg-slate-100 dark:hover:bg-neutral-750 text-slate-700 dark:text-neutral-200 text-xs font-mono font-semibold transition active:scale-95 shadow-2xs">
+              Reset
+            </button>
+          </div>
+
+          <div class="flex items-center gap-4 text-xs font-mono text-slate-500 dark:text-neutral-400">
+            <div class="flex items-center gap-1.5">
+              <span class="text-[11px]">Speed:</span>
+              <input type="range" id="algo-delay-slider" min="100" max="800" value="400" class="w-20 accent-brand-600 cursor-pointer">
+            </div>
+            <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-neutral-800 text-slate-700 dark:text-neutral-200 font-semibold">Step: <strong id="step-counter" class="text-brand-600 dark:text-brand-400">0</strong></span>
+          </div>
+        </div>
+
+        <!-- Terminal Status Output -->
+        <div class="p-3 rounded-lg bg-slate-950 text-slate-200 font-mono text-xs flex items-center gap-2.5 border border-slate-800 shadow-inner">
+          <div class="flex gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-500/80"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+          </div>
+          <span class="text-brand-400 font-bold ml-1">telemetry:</span>
+          <span id="algo-log-line" class="text-slate-300">Ready. Press Play or Step to begin simulation.</span>
+        </div>
+
+        <!-- Canvas Stage -->
+        <div class="h-60 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 rounded-xl p-4 sm:p-6 flex items-end justify-center gap-2 sm:gap-3.5 border border-slate-800 shadow-lg relative overflow-hidden" id="bars-stage">
+          <!-- Bars dynamically injected here -->
+        </div>
+
+        <!-- Legend -->
+        <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs font-mono text-slate-500 dark:text-neutral-400 pt-1">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded bg-slate-700 border border-slate-600"></span>
+            <span>Idle Element</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded bg-blue-500 shadow-xs shadow-blue-500/50"></span>
+            <span class="text-blue-600 dark:text-blue-400 font-semibold">Comparing</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded bg-amber-500 shadow-xs shadow-amber-500/50"></span>
+            <span class="text-amber-600 dark:text-amber-400 font-semibold">Swapping</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded bg-emerald-500 shadow-xs shadow-emerald-500/50"></span>
+            <span class="text-emerald-600 dark:text-emerald-400 font-semibold">Sorted / Target</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <div id="cmd-modal" class="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/70 backdrop-blur-xs flex items-start justify-center pt-20 px-4 hidden">
+    <div class="bg-white dark:bg-neutral-900 rounded-xl border border-slate-200 dark:border-neutral-800 shadow-2xl max-w-lg w-full overflow-hidden">
+      <div class="p-3 border-b border-slate-200 dark:border-neutral-800 flex items-center gap-2.5">
+        <svg class="w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="cmd-input" oninput="runCommandFilter()" placeholder="Search platform tabs, blueprints, or problems..." class="w-full bg-transparent text-xs text-slate-900 dark:text-white focus:outline-none placeholder-slate-400">
+        <kbd onclick="toggleQuickSearch(false)" class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-neutral-800 text-slate-500 cursor-pointer">ESC</kbd>
+      </div>
+      <div id="cmd-results" class="max-h-64 overflow-y-auto p-2 space-y-1 text-xs">
+        <!-- Search items dynamically injected -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200/80 dark:border-neutral-800/80 bg-white/50 dark:bg-neutral-950/50 py-6 mt-12 text-xs text-slate-500 dark:text-neutral-400">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="font-mono font-bold text-slate-700 dark:text-slate-300">TDA Tenure Plan</span>
+        <span>•</span>
+        <span>Coding & Development Vertical</span>
+      </div>
+      <div class="font-mono text-[11px] text-slate-400">
+        Engineered with Next.js App Router • PostgreSQL • Prisma • Auth.js
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* =========================================================================
+     * 12 INITIATIVES MASTER CHECKLIST DATA
+     * ========================================================================= */
+    const MASTER_PROJECTS = [
+      {
+        id: "core-platform",
+        title: "TDA Developer Portal & Core Monorepo",
+        track: "core",
+        stage: "MVP Phase 1",
+        description: "The primary centralized production platform housing Member Profiles, Projects, Problem Bank, Announcements, and Admin Management in one unified Next.js + PostgreSQL codebase.",
+        stack: ["Next.js 15 App Router", "TypeScript", "PostgreSQL", "Prisma ORM", "Auth.js v5", "Tailwind CSS", "shadcn/ui", "Zod"],
+        guidelines: [
+          "Do not split frontend and backend into separate microservices or isolated repos.",
+          "Strictly follow the official Next.js App Router Dashboard course architecture.",
+          "Enforce server-side Zod validation on all Server Actions and route handlers.",
+          "Role-Based Access Control (RBAC): Public, Member, Contributor, Mentor, Project Lead, Admin."
+        ],
+        resources: [
+          { name: "Official Next.js Dashboard Course", url: "https://nextjs.org/learn" },
+          { name: "Auth.js v5 Documentation", url: "https://authjs.dev" },
+          { name: "Prisma PostgreSQL Quickstart", url: "https://www.prisma.io/docs/getting-started" },
+          { name: "shadcn/ui Component Catalog", url: "https://ui.shadcn.com" }
+        ],
+        tasks: [
+          { id: "core-1", text: "Configure Turborepo / pnpm workspace with strict TypeScript and ESLint configs" },
+          { id: "core-2", text: "Implement Prisma schema with User, MemberProfile, Problem, and Project entities" },
+          { id: "core-3", text: "Configure Auth.js v5 with GitHub OAuth provider and role-based session middleware" },
+          { id: "core-4", text: "Build responsive Dashboard, Member Profile CRUD, and Search/Filter pagination" }
+        ]
+      },
+      {
+        id: "junior-path",
+        title: "Junior Developer Foundation (Stages 1–6)",
+        track: "foundation",
+        stage: "Continuous",
+        description: "Structured progressive curriculum taking first-year students from terminal fundamentals to merging verified PRs in production.",
+        stack: ["CLI / Bash", "Git & GitHub", "Node.js (Vanilla)", "HTML5 & CSS3", "React 19"],
+        guidelines: [
+          "No member touches React before mastering variables, functions, async/await, and DOM events.",
+          "Enforce 1 Mentor to 4 Juniors pairing ratio with weekly Friday PR deadlines.",
+          "Practice workflow: Issue → Branch → Commit → Push → PR → Review → Revision → Merge."
+        ],
+        resources: [
+          { name: "Harvard CS50x 2026", url: "https://cs50.harvard.edu/x/" },
+          { name: "MDN Learn Web Development", url: "https://developer.mozilla.org/en-US/docs/Learn" },
+          { name: "The Modern JavaScript Tutorial", url: "https://javascript.info" },
+          { name: "Pro Git Book (Ch 1–3)", url: "https://git-scm.com/book/en/v2" }
+        ],
+        tasks: [
+          { id: "jun-1", text: "Stage 1 Milestone: Build CLI Task Manager storing state in JSON via Node.js FS" },
+          { id: "jun-2", text: "Stage 2 Milestone: Create personal developer profile using semantic HTML, CSS Grid, and DOM Fetch" },
+          { id: "jun-3", text: "Stage 3 Milestone: Build frontend-only Problem Bank mock with client-side filters in React" },
+          { id: "jun-4", text: "Stage 6 Milestone: Open first reviewed feature branch PR adhering to conventional commits" }
+        ]
+      },
+      {
+        id: "dsa-bank",
+        title: "Curated DSA Problem Bank & Roadmap",
+        track: "cp",
+        stage: "Core V1",
+        description: "Curated algorithmic problem set categorized by topic, difficulty, pattern, prerequisites, and editorial notes without infringing platform terms.",
+        stack: ["PostgreSQL Problem Entity", "Prerequisites Directed Graph", "Zod Validation", "Client-side Persistence"],
+        guidelines: [
+          "Do not scrape LeetCode or CodeChef statements; store canonical external links only.",
+          "Tag every problem with its core pattern (e.g. 'Two Pointers Inward', 'Topological Sort').",
+          "Include estimated completion time and prerequisite topic tree for every problem."
+        ],
+        resources: [
+          { name: "USACO Guide Curated Roadmap", url: "https://usaco.guide/" },
+          { name: "CSES Problem Set", url: "https://cses.fi/problemset/" },
+          { name: "CP-Algorithms Knowledge Base", url: "https://cp-algorithms.com/" },
+          { name: "LeetCode Explore Patterns", url: "https://leetcode.com/explore/" }
+        ],
+        tasks: [
+          { id: "dsa-1", text: "Seed 50 core algorithmic problems spanning 6 fundamental patterns into PostgreSQL" },
+          { id: "dsa-2", text: "Implement client-side instant search, pattern dropdown, and difficulty filters" },
+          { id: "dsa-3", text: "Build personal problem completion tracker with local storage & database sync" },
+          { id: "dsa-4", text: "Add mentor editorial submission and review workflow in admin portal" }
+        ]
+      },
+      {
+        id: "algo-visualizer",
+        title: "Algorithm Visualization Engine",
+        track: "cp",
+        stage: "Core V1",
+        description: "Interactive educational visualization tool demonstrating step-by-step sorting, searching, and graph algorithm state changes.",
+        stack: ["TypeScript Generators", "SVG Canvas", "Tailwind CSS", "Motion / CSS Transitions"],
+        guidelines: [
+          "Strict separation: decoupling algorithm computation (generators) from rendering.",
+          "Never use Three.js for 2D sorting, tree, or graph visualizations.",
+          "Provide Play, Pause, Step Forward, Step Backward, Reset, and Speed Slider controls."
+        ],
+        resources: [
+          { name: "MDN SVG Tutorial", url: "https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial" },
+          { name: "VisuAlgo Visual Reference", url: "https://visualgo.net/en" },
+          { name: "React Flow Graph Visualization", url: "https://reactflow.dev" }
+        ],
+        tasks: [
+          { id: "vis-1", text: "Implement generator-based Bubble Sort yielding comparison and swap telemetry" },
+          { id: "vis-2", text: "Implement generator-based Binary Search showing left/mid/right pointer transitions" },
+          { id: "vis-3", text: "Build responsive SVG bar stage with distinct idle, comparing, swapping, and sorted states" },
+          { id: "vis-4", text: "Add BFS / DFS tree traversal visualization with animated edge highlighting" }
+        ]
+      },
+      {
+        id: "build-scratch",
+        title: "Build-from-Scratch Systems Initiative",
+        track: "systems",
+        stage: "Continuous Matrix",
+        description: "Deep dive projects where members implement internal protocol mechanisms without relying on high-level frameworks.",
+        stack: ["Node.js TCP Sockets", "C++ / Rust (Optional)", "Binary Filesystem", "RESP Protocol"],
+        guidelines: [
+          "Do not recreate operating systems or raw cryptography from scratch in production.",
+          "Focus on implementing the central mechanism: Sockets, Event Loops, B-Trees, or Lexers.",
+          "Advanced projects must have a senior reviewer, written RFC design doc, and unit tests."
+        ],
+        resources: [
+          { name: "Crafting Interpreters (Robert Nystrom)", url: "https://craftinginterpreters.com" },
+          { name: "Write Yourself a Git", url: "https://wyag.thb.lt" },
+          { name: "CMU Database Systems (15-445)", url: "https://15445.courses.cs.cmu.edu" },
+          { name: "Redis Serialization Protocol (RESP)", url: "https://redis.io/docs/reference/protocol-spec/" }
+        ],
+        tasks: [
+          { id: "sc-1", text: "Beginner: Build Raw HTTP 1.1 Server handling TCP sockets, headers, and status codes" },
+          { id: "sc-2", text: "Intermediate: Implement In-Memory LRU Cache with thread-safe TTL expiration" },
+          { id: "sc-3", text: "Intermediate: Build Git Clone supporting blob hashing, tree objects, and commit DAG" },
+          { id: "sc-4", text: "Advanced: Build Bytecode Interpreter with Lexer, recursive descent parser, and stack VM" }
+        ]
+      },
+      {
+        id: "certs-system",
+        title: "Cryptographic Certificate Verification Gateway",
+        track: "core",
+        stage: "Release 3",
+        description: "Official credential issuance pipeline generating tamper-evident PDF certificates backed by cryptographically random UUIDs.",
+        stack: ["PDF-Lib", "Web Crypto API", "Node QRCode", "Supabase Storage"],
+        guidelines: [
+          "Never use sequential IDs like TDA-0012 (trivially guessable); use cryptographically random UUIDs.",
+          "Public verification URL must display: Recipient, Event, Issue Date, Skills, and Status (Valid/Revoked).",
+          "Embed scan-ready high-contrast QR code pointing directly to verification URL."
+        ],
+        resources: [
+          { name: "PDF-Lib Documentation", url: "https://pdf-lib.js.org/" },
+          { name: "W3C Web Cryptography API", url: "https://www.w3.org/TR/WebCryptoAPI/" },
+          { name: "OWASP Digital Certificate Security", url: "https://owasp.org" }
+        ],
+        tasks: [
+          { id: "cert-1", text: "Create PDF-Lib template with dynamic student name, event title, and issued date" },
+          { id: "cert-2", text: "Generate Ed25519 / UUIDv4 cryptographic hash stored in PostgreSQL Certificate table" },
+          { id: "cert-3", text: "Embed dynamic QR code routing to public verification gateway" },
+          { id: "cert-4", text: "Build public verification page with status indicator, skill badges, and PDF download" }
+        ]
+      },
+      {
+        id: "cp-leaderboard",
+        title: "Codeforces Sync & CP Leaderboard",
+        track: "cp",
+        stage: "Release 2",
+        description: "Official Codeforces REST API integration tracking member ratings, contest history, and problems solved.",
+        stack: ["Codeforces Official REST API", "Redis Cache", "Scheduled Cron (Vercel / Upstash)"],
+        guidelines: [
+          "Cache API results in Redis; never query Codeforces on every individual page render.",
+          "Adhere strictly to official Codeforces color tiers (Candidate Master purple, Expert blue, etc.).",
+          "Do not treat problems solved on different platforms as directly equivalent."
+        ],
+        resources: [
+          { name: "Codeforces Official API Documentation", url: "https://codeforces.com/apiHelp" },
+          { name: "Upstash Redis Caching Guide", url: "https://upstash.com/docs/redis/overall" }
+        ],
+        tasks: [
+          { id: "cf-1", text: "Implement Codeforces API client fetching user.info and user.status with error retries" },
+          { id: "cf-2", text: "Setup scheduled daily cron job to sync member ratings at 04:00 UTC" },
+          { id: "cf-3", text: "Implement Redis key-value caching layer with 6-hour TTL to prevent rate limits" },
+          { id: "cf-4", text: "Build responsive CP leaderboard with color-coded rank badges and max rating" }
+        ]
+      },
+      {
+        id: "analytics-engine",
+        title: "Coding Analytics & Activity Telemetry",
+        track: "core",
+        stage: "Release 2",
+        description: "Aggregated metrics dashboard displaying individual streaks, problem distributions, and team velocity.",
+        stack: ["Recharts", "PostgreSQL Aggregations", "Prisma GroupBy"],
+        guidelines: [
+          "Do not calculate historical statistics on every page render; pre-aggregate via daily snapshots.",
+          "Clearly label automated API data versus manually verified metrics.",
+          "Track DailyMemberMetric, ContestResult, and ProblemCompletion."
+        ],
+        resources: [
+          { name: "Recharts React Visualization Library", url: "https://recharts.org/" },
+          { name: "PostgreSQL Materialized Views Guide", url: "https://www.postgresql.org/docs/current/rules-materializedviews.html" }
+        ],
+        tasks: [
+          { id: "ana-1", text: "Build DailyMemberMetric aggregate database schema and migration" },
+          { id: "ana-2", text: "Implement Recharts difficulty distribution stacked bar (Easy / Medium / Hard)" },
+          { id: "ana-3", text: "Create GitHub commit and PR activity streak heatmap calendar" },
+          { id: "ana-4", text: "Build team velocity comparison chart for internal hackathons" }
+        ]
+      },
+      {
+        id: "engineering-labs",
+        title: "TDA Engineering Lab Sandboxes",
+        track: "labs",
+        stage: "Experimental",
+        description: "Isolated research prototypes exploring WebSockets, Docker containerization, Redis, and Vector AI.",
+        stack: ["Docker Multi-stage", "WebSockets / ws", "pgvector", "Redis"],
+        guidelines: [
+          "Each lab must follow: Problem → Research → Implementation → Testing → Documentation.",
+          "Labs must remain in /labs or separate branches; never pollute production Next.js core.",
+          "Complete Docker and Redis caching before exploring microservices or RAG."
+        ],
+        resources: [
+          { name: "Docker Get Started Guide", url: "https://docs.docker.com/get-started/" },
+          { name: "pgvector PostgreSQL Extension Docs", url: "https://github.com/pgvector/pgvector" },
+          { name: "MDN WebSocket API Guide", url: "https://developer.mozilla.org/en-US/docs/Web/API/WebSocket" }
+        ],
+        tasks: [
+          { id: "lab-1", text: "Lab 01: Build live WebSocket announcement push dashboard prototype" },
+          { id: "lab-2", text: "Lab 02: Write multi-stage Dockerfile containerizing Next.js for zero-dependency runs" },
+          { id: "lab-3", text: "Lab 03: Implement pgvector semantic search over curated markdown technical notes" },
+          { id: "lab-4", text: "Lab 04: Prototype peer-to-peer 1-on-1 code screen-share using STUN/WebRTC" }
+        ]
+      },
+      {
+        id: "dev-culture",
+        title: "Engineering Culture, Git & PR Standards",
+        track: "ops",
+        stage: "Continuous",
+        description: "Professional software development workflows ensuring quality code review, automated CI, and clean history.",
+        stack: ["GitHub Actions", "Conventional Commits", "Vitest", "Playwright"],
+        guidelines: [
+          "Strict branch naming: feature/*, fix/*, docs/*, test/*.",
+          "Every pull request requires: Linked issue, description, UI screenshots, and zero secrets.",
+          "Code reviews examine correctness, security, tests, and accessibility—not formatting alone."
+        ],
+        resources: [
+          { name: "Conventional Commits 1.0.0", url: "https://www.conventionalcommits.org" },
+          { name: "GitHub Pull Request Review Guide", url: "https://docs.github.com/en/pull-requests" },
+          { name: "Vitest Fast Unit Test Runner", url: "https://vitest.dev/" }
+        ],
+        tasks: [
+          { id: "ops-1", text: "Create .github/PULL_REQUEST_TEMPLATE.md and ISSUE_TEMPLATE directory" },
+          { id: "ops-2", text: "Configure GitHub Actions CI running lint, typecheck, and Vitest suite on every PR" },
+          { id: "ops-3", text: "Implement branch protection rules on main requiring 1 senior approval" },
+          { id: "ops-4", text: "Draft and publish TDA Engineering Maintainer Handbook for succession handover" }
+        ]
+      },
+      {
+        id: "knowledge-base",
+        title: "Technical Knowledge Base & Notes Repo",
+        track: "ops",
+        stage: "Release 2",
+        description: "Permanent technical documentation repository maintained in Markdown / MDX covering DSA, web, and system design.",
+        stack: ["Nextra / Docusaurus", "Markdown / MDX", "GitHub Organization"],
+        guidelines: [
+          "Do not build an overly complex custom CMS; keep markdown files version-controlled in Git.",
+          "Every document must include: Prerequisites, Objectives, Code Example, Practice Task, and Reviewer.",
+          "Categories: DSA, Frontend, Backend, Databases, Git, AI, and Career Roadmaps."
+        ],
+        resources: [
+          { name: "Nextra Static Site Framework", url: "https://nextra.site/" },
+          { name: "Markdown Guide Official Spec", url: "https://www.markdownguide.org/" }
+        ],
+        tasks: [
+          { id: "kb-1", text: "Establish directory structure: knowledge-base/{dsa,frontend,backend,git,ai}" },
+          { id: "kb-2", text: "Author 10 core pattern guides with code snippets and visual diagrams" },
+          { id: "kb-3", text: "Add peer review stamp and last reviewed metadata to all documents" },
+          { id: "kb-4", text: "Integrate full-text client search across all documentation topics" }
+        ]
+      },
+      {
+        id: "mentorship-sprints",
+        title: "Peer Mentorship Cadence & Succession",
+        track: "ops",
+        stage: "12-Month Cadence",
+        description: "Weekly knowledge transfer loop connecting 2nd-year mentors with 1st-year juniors to guarantee continuous leadership.",
+        stack: ["Agile Sprint Planning", "Weekly Cadence", "Pair Programming"],
+        guidelines: [
+          "Ratio: 1 Mentor for 3–5 Juniors; never leave a first-year without an assigned mentor.",
+          "Weekly Rhythm: Mon (Issue Selection), Tue-Thu (Development), Fri (PR Open), Sat (Review), Sun (Demo).",
+          "Rotate responsibilities so all members touch frontend, backend, database, and documentation."
+        ],
+        resources: [
+          { name: "Tenure Plan Sprint Specifications", url: "#tab-roadmap" },
+          { name: "Effective Peer Code Review Protocols", url: "https://smartbear.com/learn/code-review/best-practices-for-peer-code-review/" }
+        ],
+        tasks: [
+          { id: "men-1", text: "Assign junior-mentor squads with dedicated GitHub project boards" },
+          { id: "men-2", text: "Run weekly Monday issue planning standups with scoped beginner tasks" },
+          { id: "men-3", text: "Enforce Friday pull request open deadlines with live screen-sharing demos" },
+          { id: "men-4", text: "Conduct Month 11-12 maintainer handover and successor onboarding elections" }
+        ]
+      }
+    ];
+
+    /* =========================================================================
+     * IN-MEMORY DATA STORES
+     * ========================================================================= */
+    let checkedTaskIds = new Set();
+
+    /* =========================================================================
+     * PERSISTENCE ENGINE
+     * ========================================================================= */
+    function loadSavedState() {
+      try {
+        const savedTasks = localStorage.getItem('tda_checklist_state');
+        if (savedTasks) {
+          checkedTaskIds = new Set(JSON.parse(savedTasks));
+        }
+      } catch (e) {
+        console.warn('Storage unavailable:', e);
+      }
+    }
+
+    function saveChecklistState() {
+      try {
+        localStorage.setItem('tda_checklist_state', JSON.stringify([...checkedTaskIds]));
+      } catch (e) {}
+    }
+
+    function saveProblemsState() {
+      try {
+        localStorage.setItem('tda_problems_state', JSON.stringify([...solvedProblemIds]));
+      } catch (e) {}
+    }
+
+    /* =========================================================================
+     * MASTER CHECKLIST RENDERING & FILTERING
+     * ========================================================================= */
+    function renderMasterChecklist(projects) {
+      const container = document.getElementById('checklist-projects-container');
+      if (projects.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded-xl">
+            <p class="text-slate-400 font-mono text-xs">No matching projects or guidelines found. Adjust filters.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = projects.map(proj => {
+        const totalTasks = proj.tasks.length;
+        const completedTasks = proj.tasks.filter(t => checkedTaskIds.has(t.id)).length;
+        const percent = Math.round((completedTasks / totalTasks) * 100);
+
+        return `
+          <div class="border border-slate-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 rounded-xl p-5 sm:p-6 shadow-xs space-y-4">
+            
+            <!-- Project Header -->
+            <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3 border-b border-slate-100 dark:border-neutral-800 pb-3.5">
+              <div class="space-y-1">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 border border-brand-200 dark:border-brand-800 uppercase">
+                    ${proj.track}
+                  </span>
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-neutral-800 text-slate-600 dark:text-neutral-400">
+                    ${proj.stage}
+                  </span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white">${proj.title}</h3>
+                <p class="text-xs text-slate-600 dark:text-neutral-300 max-w-2xl">${proj.description}</p>
+              </div>
+
+              <!-- Project Mini Meter -->
+              <div class="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center shrink-0 bg-slate-50 dark:bg-neutral-850 p-2.5 rounded-lg border border-slate-200 dark:border-neutral-800 min-w-[130px]">
+                <div class="text-[10px] font-mono text-slate-400 uppercase">Project Done</div>
+                <div class="text-sm font-bold font-mono text-brand-600 dark:text-brand-400">${percent}% (${completedTasks}/${totalTasks})</div>
+              </div>
+            </div>
+
+            <!-- Tech Stack Pills -->
+            <div class="flex items-center gap-1.5 flex-wrap text-[11px] font-mono">
+              <span class="text-slate-400">Stack:</span>
+              ${proj.stack.map(s => `<span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-neutral-800 text-slate-700 dark:text-neutral-300 border border-slate-200/60 dark:border-neutral-700/60">${s}</span>`).join('')}
+            </div>
+
+            <!-- Architectural Guidelines -->
+            <div class="p-3 rounded-lg bg-slate-50 dark:bg-neutral-850/80 border border-slate-200/80 dark:border-neutral-800 text-xs space-y-1.5">
+              <span class="font-mono text-[10px] font-bold text-slate-500 dark:text-neutral-400 uppercase tracking-wider block">Key Architectural Rules & Guardrails:</span>
+              <ul class="list-disc list-inside space-y-1 text-slate-600 dark:text-neutral-300">
+                ${proj.guidelines.map(g => `<li>${g}</li>`).join('')}
+              </ul>
+            </div>
+
+            <!-- Tasks & Resources Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 pt-1">
+              
+              <!-- Checkable Tasks (Left 2 cols) -->
+              <div class="lg:col-span-2 space-y-2">
+                <span class="font-mono text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Verifiable Milestone Checklist:</span>
+                <div class="space-y-1.5">
+                  ${proj.tasks.map(t => {
+                    const isDone = checkedTaskIds.has(t.id);
+                    return `
+                      <label class="flex items-start gap-2.5 p-2 rounded-lg border border-slate-200/80 dark:border-neutral-800/80 hover:bg-slate-50 dark:hover:bg-neutral-850/50 cursor-pointer transition">
+                        <input type="checkbox" ${isDone ? 'checked' : ''} onchange="toggleTaskCheck('${t.id}')" class="mt-0.5 rounded border-slate-300 text-brand-600 focus:ring-brand-500 cursor-pointer">
+                        <span class="text-xs ${isDone ? 'line-through text-slate-400 dark:text-neutral-500' : 'text-slate-800 dark:text-neutral-200'}">${t.text}</span>
+                      </label>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+
+              <!-- Official Resources (Right 1 col) -->
+              <div class="space-y-2">
+                <span class="font-mono text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Official Primary Docs:</span>
+                <div class="space-y-1 text-xs">
+                  ${proj.resources.map(r => `
+                    <a href="${r.url}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-2 rounded-lg border border-slate-200/80 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:border-brand-300 dark:hover:border-brand-700 hover:text-brand-600 dark:hover:text-brand-400 transition group">
+                      <span class="font-medium text-slate-700 dark:text-neutral-300 group-hover:text-brand-600 dark:group-hover:text-brand-400 truncate mr-2">${r.name}</span>
+                      <svg class="w-3.5 h-3.5 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                  `).join('')}
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterChecklistProjects() {
+      const search = (document.getElementById('checklist-search').value || '').toLowerCase();
+      const track = document.getElementById('checklist-category-filter').value;
+
+      const filtered = MASTER_PROJECTS.filter(p => {
+        const matchesTrack = track === 'all' || p.track === track;
+        const matchesSearch = p.title.toLowerCase().includes(search) ||
+                              p.description.toLowerCase().includes(search) ||
+                              p.stack.some(s => s.toLowerCase().includes(search));
+        return matchesTrack && matchesSearch;
+      });
+
+      renderMasterChecklist(filtered);
+    }
+
+    function toggleTaskCheck(taskId) {
+      if (checkedTaskIds.has(taskId)) {
+        checkedTaskIds.delete(taskId);
+      } else {
+        checkedTaskIds.add(taskId);
+      }
+      saveChecklistState();
+      updateChecklistStats();
+      filterChecklistProjects();
+    }
+
+    function resetChecklist() {
+      checkedTaskIds.clear();
+      saveChecklistState();
+      updateChecklistStats();
+      filterChecklistProjects();
+    }
+
+    function updateChecklistStats() {
+      let totalTasks = 0;
+      MASTER_PROJECTS.forEach(p => totalTasks += p.tasks.length);
+      const completed = checkedTaskIds.size;
+      const percent = totalTasks > 0 ? Math.round((completed / totalTasks) * 100) : 0;
+
+      document.getElementById('global-progress-percent').textContent = `${percent}%`;
+      document.getElementById('global-progress-bar').style.width = `${percent}%`;
+      document.getElementById('global-progress-fraction').textContent = `${completed} / ${totalTasks} Tasks Complete`;
+      document.getElementById('nav-checklist-stat').textContent = `${completed}/${totalTasks} Done`;
+    }
+
+    /* =========================================================================
+     * THEME TOGGLE ENGINE
+     * ========================================================================= */
+    function initTheme() {
+      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+        document.getElementById('theme-sun').classList.remove('hidden');
+        document.getElementById('theme-moon').classList.add('hidden');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.getElementById('theme-sun').classList.add('hidden');
+        document.getElementById('theme-moon').classList.remove('hidden');
+      }
+
+      document.getElementById('theme-btn').addEventListener('click', () => {
+        const currentlyDark = document.documentElement.classList.toggle('dark');
+        document.getElementById('theme-sun').classList.toggle('hidden', !currentlyDark);
+        document.getElementById('theme-moon').classList.toggle('hidden', currentlyDark);
+      });
+    }
+
+    /* =========================================================================
+     * TAB NAVIGATION ENGINE
+     * ========================================================================= */
+    function setTab(tabId) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-tab').forEach(b => {
+        b.classList.remove('active', 'text-brand-700', 'dark:text-brand-300', 'bg-brand-50', 'dark:bg-brand-950/80', 'border-brand-200/80', 'dark:border-brand-800/80');
+        b.classList.add('text-slate-600', 'dark:text-neutral-400', 'border-transparent');
+      });
+
+      const activePanel = document.getElementById(tabId);
+      if (activePanel) {
+        activePanel.classList.add('active');
+      }
+
+      const activeBtn = document.querySelector(`[data-target="${tabId}"]`);
+      if (activeBtn) {
+        activeBtn.classList.add('active', 'text-brand-700', 'dark:text-brand-300', 'bg-brand-50', 'dark:bg-brand-950/80', 'border-brand-200/80', 'dark:border-brand-800/80');
+        activeBtn.classList.remove('text-slate-600', 'dark:text-neutral-400', 'border-transparent');
+      }
+    }
+
+    /* =========================================================================
+     * ALGORITHM VISUALIZER ENGINE
+     * ========================================================================= */
+    let visualizerArray = [64, 34, 25, 12, 22, 11, 90, 48];
+    let algoGenerator = null;
+    let isPlaying = false;
+    let playInterval = null;
+    let stepCount = 0;
+
+    function* makeBubbleSortGenerator(arr) {
+      const a = [...arr];
+      const n = a.length;
+      for (let i = 0; i < n - 1; i++) {
+        for (let j = 0; j < n - i - 1; j++) {
+          yield { type: 'compare', indices: [j, j + 1], array: [...a], log: `Comparing elements at index ${j} (${a[j]}) and ${j + 1} (${a[j + 1]})` };
+          if (a[j] > a[j + 1]) {
+            const temp = a[j];
+            a[j] = a[j + 1];
+            a[j + 1] = temp;
+            yield { type: 'swap', indices: [j, j + 1], array: [...a], log: `Swapping: ${a[j + 1]} > ${a[j]} → Inverted` };
+          }
+        }
+        yield { type: 'element-sorted', indices: [n - i - 1], array: [...a], log: `Element at index ${n - i - 1} (${a[n - i - 1]}) is now sorted` };
+      }
+      yield { type: 'complete', indices: [], array: [...a], log: `Bubble Sort Complete. All elements in ascending order.` };
+    }
+
+    function* makeBinarySearchGenerator(arr, target) {
+      const sorted = [...arr].sort((a, b) => a - b);
+      let left = 0;
+      let right = sorted.length - 1;
+
+      yield { type: 'init', indices: [], array: sorted, log: `Binary Search target = ${target}. Array sorted initially.` };
+
+      while (left <= right) {
+        const mid = Math.floor((left + right) / 2);
+        yield { type: 'compare', indices: [mid], array: sorted, log: `Checking mid index ${mid} (value: ${sorted[mid]})` };
+
+        if (sorted[mid] === target) {
+          yield { type: 'complete', indices: [mid], array: sorted, log: `Target ${target} located at index ${mid} in O(log N) operations.` };
+          return;
+        } else if (sorted[mid] < target) {
+          yield { type: 'adjust-left', indices: [mid], array: sorted, log: `${sorted[mid]} < ${target}. Moving left pointer from ${left} to ${mid + 1}.` };
+          left = mid + 1;
+        } else {
+          yield { type: 'adjust-right', indices: [mid], array: sorted, log: `${sorted[mid]} > ${target}. Moving right pointer from ${right} to ${mid - 1}.` };
+          right = mid - 1;
+        }
+      }
+      yield { type: 'complete', indices: [], array: sorted, log: `Target not present in search partition.` };
+    }
+
+    function drawBars(values, comparing = [], swapping = [], completed = []) {
+      const stage = document.getElementById('bars-stage');
+      const maxVal = Math.max(...values, 100);
+
+      stage.innerHTML = values.map((val, idx) => {
+        let barClass = "from-indigo-600 to-slate-700 text-slate-400";
+        let shadow = "";
+
+        if (completed.includes(idx)) {
+          barClass = "from-emerald-400 to-emerald-600 text-emerald-300";
+          shadow = "shadow-lg shadow-emerald-500/30";
+        } else if (swapping.includes(idx)) {
+          barClass = "from-amber-400 to-amber-600 text-amber-300 scale-105";
+          shadow = "shadow-lg shadow-amber-500/40";
+        } else if (comparing.includes(idx)) {
+          barClass = "from-cyan-400 to-blue-600 text-cyan-300 scale-105";
+          shadow = "shadow-lg shadow-blue-500/40";
+        }
+
+        const heightPercent = Math.max(16, Math.round((val / maxVal) * 85));
+        return `
+          <div class="flex-1 max-w-[44px] flex flex-col items-center gap-1.5 transition-transform">
+            <span class="text-[10px] font-mono font-bold ${completed.includes(idx) ? 'text-emerald-400' : comparing.includes(idx) ? 'text-cyan-400' : 'text-slate-400'}">${val}</span>
+            <div style="height: ${heightPercent}%" class="w-full rounded-t-md bg-gradient-to-t ${barClass} ${shadow} transition-all duration-150"></div>
+            <span class="text-[9px] font-mono text-slate-500 font-semibold">[${idx}]</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function resetVisualizerState() {
+      if (playInterval) clearInterval(playInterval);
+      isPlaying = false;
+      document.getElementById('algo-run-label').textContent = 'Play';
+      stepCount = 0;
+      document.getElementById('step-counter').textContent = '0';
+
+      const choice = document.getElementById('visualizer-algo-choice').value;
+      if (choice === 'bubble') {
+        visualizerArray = [64, 34, 25, 12, 22, 11, 90, 48];
+        algoGenerator = makeBubbleSortGenerator(visualizerArray);
+        drawBars(visualizerArray);
+        document.getElementById('algo-log-line').textContent = 'Bubble Sort initialized. Ready to step.';
+      } else {
+        const sorted = [11, 12, 22, 25, 34, 48, 64, 90];
+        visualizerArray = sorted;
+        algoGenerator = makeBinarySearchGenerator(sorted, 34);
+        drawBars(visualizerArray);
+        document.getElementById('algo-log-line').textContent = 'Binary Search initialized for target 34.';
+      }
+    }
+
+    function stepForwardSingle() {
+      if (!algoGenerator) resetVisualizerState();
+      const next = algoGenerator.next();
+      if (next.done) {
+        if (playInterval) clearInterval(playInterval);
+        isPlaying = false;
+        document.getElementById('algo-run-label').textContent = 'Play';
+        return false;
+      }
+
+      stepCount++;
+      document.getElementById('step-counter').textContent = stepCount;
+      const step = next.value;
+      document.getElementById('algo-log-line').textContent = step.log;
+
+      if (step.type === 'compare') {
+        drawBars(step.array, step.indices, [], []);
+      } else if (step.type === 'swap') {
+        drawBars(step.array, [], step.indices, []);
+      } else if (step.type === 'element-sorted') {
+        drawBars(step.array, [], [], step.indices);
+      } else if (step.type === 'complete') {
+        drawBars(step.array, [], [], step.array.map((_, i) => i));
+      } else {
+        drawBars(step.array);
+      }
+      return true;
+    }
+
+    function togglePlayState() {
+      if (isPlaying) {
+        clearInterval(playInterval);
+        isPlaying = false;
+        document.getElementById('algo-run-label').textContent = 'Play';
+      } else {
+        isPlaying = true;
+        document.getElementById('algo-run-label').textContent = 'Pause';
+        const delay = 900 - document.getElementById('algo-delay-slider').value;
+        playInterval = setInterval(() => {
+          const hasMore = stepForwardSingle();
+          if (!hasMore) {
+            clearInterval(playInterval);
+            isPlaying = false;
+            document.getElementById('algo-run-label').textContent = 'Play';
+          }
+        }, delay);
+      }
+    }
+
+    /* =========================================================================
+     * COMMAND PALETTE QUICK SEARCH
+     * ========================================================================= */
+    const SEARCH_INDEX = [
+      { name: "Master Project Checklist & Guidelines", tab: "tab-checklist", desc: "Interactive checklist covering all 12 platform initiatives" },
+      { name: "Platform Architecture & Tech Stack", tab: "tab-blueprint", desc: "Next.js, TypeScript, PostgreSQL, Prisma, Auth.js standards" },
+      { name: "Junior Developer Path (Stages 1–6)", tab: "tab-junior", desc: "CS50x, Web Fundamentals, React, DBs, and First Pull Request" },
+      { name: "Algorithm Simulation Engine", tab: "tab-visualizer", desc: "Playable Bubble Sort and Binary Search step generators" }
+    ];
+
+    function toggleQuickSearch(show) {
+      const modal = document.getElementById('cmd-modal');
+      modal.classList.toggle('hidden', !show);
+      if (show) {
+        const input = document.getElementById('cmd-input');
+        input.value = '';
+        input.focus();
+        runCommandFilter();
+      }
+    }
+
+    function runCommandFilter() {
+      const query = (document.getElementById('cmd-input').value || '').toLowerCase();
+      const resultsContainer = document.getElementById('cmd-results');
+      const filtered = SEARCH_INDEX.filter(item => 
+        item.name.toLowerCase().includes(query) || item.desc.toLowerCase().includes(query)
+      );
+
+      if (filtered.length === 0) {
+        resultsContainer.innerHTML = `<div class="p-3 text-center text-slate-400">No matching views found.</div>`;
+        return;
+      }
+
+      resultsContainer.innerHTML = filtered.map(item => `
+        <div onclick="selectSearchResult('${item.tab}')" class="p-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-neutral-800 cursor-pointer flex flex-col gap-0.5 transition">
+          <span class="font-bold text-slate-900 dark:text-white">${item.name}</span>
+          <span class="text-[11px] text-slate-500 dark:text-neutral-400">${item.desc}</span>
+        </div>
+      `).join('');
+    }
+
+    function selectSearchResult(tabId) {
+      setTab(tabId);
+      toggleQuickSearch(false);
+    }
+
+    // Keyboard shortcut listener for ⌘K / Ctrl+K and Esc
+    window.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        toggleQuickSearch(true);
+      } else if (e.key === 'Escape') {
+        toggleQuickSearch(false);
+      }
+    });
+
+    /* =========================================================================
+     * INITIALIZATION ON PAGE LOAD
+     * ========================================================================= */
+    window.onload = function () {
+      initTheme();
+      loadSavedState();
+      renderMasterChecklist(MASTER_PROJECTS);
+      updateChecklistStats();
+      resetVisualizerState();
+    };
+  </script>
+</body>
+</html>
