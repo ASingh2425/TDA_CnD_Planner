@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+
 test("four entry points lead to actionable destinations", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
@@ -20,6 +21,7 @@ test("four entry points lead to actionable destinations", async ({ page }) => {
   }
   expect(errors).toEqual([]);
 });
+
 test("tasks filter, show empty states and expose deliverables", async ({
   page,
 }) => {
@@ -38,7 +40,11 @@ test("tasks filter, show empty states and expose deliverables", async ({
   await expect(
     page.getByRole("heading", { name: "What success looks like" }),
   ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Problem statement" }),
+  ).toBeVisible();
 });
+
 test("visualizer handles steps reset and input errors", async ({ page }) => {
   await page.goto("/#/cp");
   await page.getByRole("button", { name: "Step forward" }).click();
@@ -59,6 +65,7 @@ test("visualizer handles steps reset and input errors", async ({ page }) => {
   await page.getByLabel("Values (up to").fill("bad");
   await expect(page.getByRole("alert")).toContainText("Enter 1–20");
 });
+
 test("public pages have no account or management controls", async ({
   page,
 }) => {
@@ -67,6 +74,8 @@ test("public pages have no account or management controls", async ({
     "learn",
     "tasks",
     "projects",
+    "project/build-scratch",
+    "explore",
     "cp",
     "resources",
     "task/first-contribution",
@@ -92,7 +101,10 @@ test("public pages have no account or management controls", async ({
     fullPage: true,
   });
 });
-test("all learning tracks and resources are open", async ({ page }) => {
+
+test("all learning tracks, blueprints, labs and resources are open", async ({
+  page,
+}) => {
   await page.goto("/#/learn");
   for (const name of [
     "Developer Foundations",
@@ -103,6 +115,14 @@ test("all learning tracks and resources are open", async ({ page }) => {
     await page.getByRole("button", { name, exact: true }).click();
     await expect(page.getByRole("dialog")).toHaveCount(0);
   }
+  await page.goto("/#/explore");
+  await expect(
+    page.getByRole("heading", { name: "Advanced Engineering Labs." }),
+  ).toBeVisible();
+  await page.goto("/#/project/build-scratch");
+  await expect(
+    page.getByRole("heading", { name: "Architecture & folder structure" }),
+  ).toBeVisible();
   await page.goto("/#/resources");
   await expect(
     page.getByRole("heading", { name: "Resources for every path." }),

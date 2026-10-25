@@ -6,6 +6,7 @@ import {
   BookOpen,
   Code2,
   Compass,
+  FlaskConical,
   FolderGit2,
   GitPullRequest,
   GraduationCap,
@@ -13,22 +14,42 @@ import {
   Layers,
   Trophy,
 } from "lucide-react";
-import { initiatives, tasks as catalog, repo } from "./data";
-import { Learning, TaskList, TaskDetail, CP } from "./MemberPages";
+import {
+  tasks as catalog,
+  repo,
+  PROJECT_BLUEPRINTS,
+  ENGINEERING_LABS,
+  CURRICULUM_MODULES,
+  CP_PROBLEMS,
+} from "./data";
+import {
+  Learning,
+  TaskList,
+  TaskDetail,
+  ProjectCatalog,
+  ProjectDetail,
+  ExploreLabs,
+  CP,
+} from "./MemberPages";
 import { Link, Ext, Title } from "./shared";
 import { Resources } from "./Resources";
 import "./style.css";
+
 const nav = [
   ["home", "Start Here", House],
-  ["learn", "Learning Paths", BookOpen],
-  ["tasks", "Explore Tasks", Compass],
-  ["projects", "Build with TDA", FolderGit2],
-  ["cp", "Competitive Programming", Trophy],
+  ["learn", "01. Learn", BookOpen],
+  ["tasks", "02. Practise", Compass],
+  ["projects", "03. Build", FolderGit2],
+  ["explore", "04. Explore", FlaskConical],
+  ["cp", "05. Competitive Programming", Trophy],
   ["resources", "Resources", Layers],
 ] as const;
+
 export function App() {
   const [route, R] = useState(location.hash.slice(2) || "home");
+  const [hubQuery, HQ] = useState("");
   const tasks = catalog;
+
   useEffect(() => {
     const navigate = () => {
       R(location.hash.slice(2) || "home");
@@ -37,8 +58,33 @@ export function App() {
     window.addEventListener("hashchange", navigate);
     return () => window.removeEventListener("hashchange", navigate);
   }, []);
+
   const [page, param] = route.split("?")[0].split("/");
   const recommended = tasks[0];
+
+  const qNorm = hubQuery.trim().toLowerCase();
+  const quickTasks = qNorm
+    ? tasks
+        .filter((t) =>
+          `${t.title} ${t.description} ${t.category} ${t.skills.join(" ")}`
+            .toLowerCase()
+            .includes(qNorm),
+        )
+        .slice(0, 4)
+    : [];
+  const quickProjects = qNorm
+    ? PROJECT_BLUEPRINTS.filter((p) =>
+        `${p.title} ${p.tagline} ${p.discipline} ${p.techStack.recommended.join(" ")}`
+          .toLowerCase()
+          .includes(qNorm),
+      ).slice(0, 3)
+    : [];
+  const quickLabs = qNorm
+    ? ENGINEERING_LABS.filter((l) =>
+        `${l.title} ${l.summary} ${l.domain}`.toLowerCase().includes(qNorm),
+      ).slice(0, 3)
+    : [];
+
   return (
     <div className="shell">
       <a
@@ -61,9 +107,9 @@ export function App() {
           </span>
         </Link>
         <div className="tenure">
-          <span className="dot" /> THE 2026–27 TENURE
+          <span className="dot" /> ENGINEERING RESOURCE HUB
         </div>
-        <div className="nav-label">YOUR WORKSPACE</div>
+        <div className="nav-label">LIBRARY SECTIONS</div>
         <nav aria-label="Main navigation">
           {nav.map(([id, label, Icon]) => (
             <Link
@@ -82,7 +128,10 @@ export function App() {
             <GitPullRequest size={21} />
           </div>
           <h3>Small steps. Real impact.</h3>
-          <p>Your first contribution could be someone else’s starting point.</p>
+          <p>
+            An open, self-directed learning and project library for the TDA
+            community.
+          </p>
           <Ext url={repo}>Visit our repository</Ext>
         </div>
         <div className="sidebar-footer">Built together. Passed forward.</div>
@@ -90,9 +139,10 @@ export function App() {
       <div className="workspace">
         <header>
           <div>
-            <span className="header-org">Developer Hub</span>
+            <span className="header-org">Engineering Resource Hub</span>
             <span className="slash">/</span>
-            {nav.find((n) => n[0] === page)?.[1] ?? "Task details"}
+            {nav.find((n) => n[0] === page)?.[1] ??
+              (page === "project" ? "Project blueprint" : "Task details")}
           </div>
           <Link to="learn" className="button secondary small">
             Explore all tracks <ArrowUpRight size={14} />
@@ -101,26 +151,39 @@ export function App() {
         <main id="main" tabIndex={-1}>
           <div className="mode">
             <span className="dot" />
-            Open learning hub<span>All tracks · Open to everyone</span>
+            Open engineering library
+            <span>
+              {CURRICULUM_MODULES.length} tracks · {tasks.length} exercises ·{" "}
+              {PROJECT_BLUEPRINTS.length} blueprints · {ENGINEERING_LABS.length}{" "}
+              labs · {CP_PROBLEMS.length} CP problems
+            </span>
           </div>
           {page === "home" && (
             <>
               <div className="hero">
                 <div>
-                  <span className="eyebrow">WELCOME TO TDA C&D</span>
+                  <span className="eyebrow">
+                    TDA C&D — ENGINEERING RESOURCE HUB
+                  </span>
                   <h1>
                     Your next step
                     <br />
                     starts <em>here.</em>
                   </h1>
                   <p>
-                    Learn new skills. Build real software. Find your people.
-                    <br className="desktop" /> Start with one manageable task —
-                    we’ll grow from there.
+                    An open, self-directed learning and project library for the
+                    TDA Coding & Development community.
+                    <br className="desktop" /> Explore roadmaps, practise coding
+                    exercises, build guided projects and run engineering labs.
                   </p>
-                  <Link to="learn/0" className="button">
-                    Find my starting point <ArrowRight size={17} />
-                  </Link>
+                  <div className="actions">
+                    <Link to="learn/0" className="button">
+                      Find my starting point <ArrowRight size={17} />
+                    </Link>
+                    <Link to="tasks" className="button secondary">
+                      Browse {tasks.length} exercises
+                    </Link>
+                  </div>
                 </div>
                 <div className="hero-art" aria-hidden="true">
                   <div className="orbit orbit-one" />
@@ -137,6 +200,65 @@ export function App() {
                   <span className="art-spark">✳</span>
                 </div>
               </div>
+
+              <section className="card hub-search-box">
+                <label className="search-label">
+                  Search across all exercises, project blueprints and labs
+                  <input
+                    value={hubQuery}
+                    onChange={(e) => HQ(e.target.value)}
+                    placeholder="Search e.g. Binary Search, HTTP/1.1, SQL, RAG, XSS, Docker, Knapsack…"
+                  />
+                </label>
+                {qNorm && (
+                  <div className="quick-results">
+                    {quickTasks.map((t) => (
+                      <Link
+                        key={t.id}
+                        to={`task/${t.id}`}
+                        className="quick-result-item"
+                      >
+                        <span className="badge">Exercise · {t.difficulty}</span>
+                        <strong>{t.title}</strong>
+                        <span className="muted">{t.category}</span>
+                      </Link>
+                    ))}
+                    {quickProjects.map((p) => (
+                      <Link
+                        key={p.id}
+                        to={`project/${p.id}`}
+                        className="quick-result-item"
+                      >
+                        <span className="badge">
+                          Blueprint · {p.difficulty}
+                        </span>
+                        <strong>{p.title}</strong>
+                        <span className="muted">{p.discipline}</span>
+                      </Link>
+                    ))}
+                    {quickLabs.map((l) => (
+                      <Link
+                        key={l.id}
+                        to="explore"
+                        className="quick-result-item"
+                      >
+                        <span className="badge">Lab · {l.difficulty}</span>
+                        <strong>{l.title}</strong>
+                        <span className="muted">{l.domain}</span>
+                      </Link>
+                    ))}
+                    {!quickTasks.length &&
+                      !quickProjects.length &&
+                      !quickLabs.length && (
+                        <p className="muted">
+                          No matches for “{hubQuery}”. Try another topic or
+                          browse all exercises.
+                        </p>
+                      )}
+                  </div>
+                )}
+              </section>
+
               <div className="section-title">
                 <div>
                   <span className="eyebrow">MAKE IT YOURS</span>
@@ -202,6 +324,61 @@ export function App() {
                   );
                 })}
               </div>
+
+              <div className="section-title" style={{ marginTop: 32 }}>
+                <div>
+                  <span className="eyebrow">THE FIVE PILLARS</span>
+                  <h2>How the Resource Hub is structured</h2>
+                </div>
+                <span className="muted">
+                  Self-contained guides · Zero account locks
+                </span>
+              </div>
+              <div className="pillar-grid">
+                {[
+                  [
+                    "01. Learn",
+                    "Programming fundamentals, DSA, web development, databases, operating systems, networking, Git, software engineering and specialised tracks.",
+                    "learn",
+                    `${CURRICULUM_MODULES.length} curriculum modules`,
+                  ],
+                  [
+                    "02. Practise",
+                    "Exercises organised by topic and difficulty, with problem statements, hints, expected output, constraints, test cases and solution references.",
+                    "tasks",
+                    `${tasks.length} practical exercises`,
+                  ],
+                  [
+                    "03. Build",
+                    "Guided projects with problem statements, architecture, milestones, recommended stacks, folder structures, implementation steps and testing.",
+                    "projects",
+                    `${PROJECT_BLUEPRINTS.length} project blueprints`,
+                  ],
+                  [
+                    "04. Explore",
+                    "Advanced engineering labs, cybersecurity, AI/ML, systems programming, performance optimisation, open-source tooling and experiments.",
+                    "explore",
+                    `${ENGINEERING_LABS.length} deep-dive labs`,
+                  ],
+                  [
+                    "05. Competitive Programming",
+                    "Topic-wise problem sets, contest preparation, complexity analysis, algorithm visualisations and links to established practice platforms.",
+                    "cp",
+                    `${CP_PROBLEMS.length} curated problems + visualisers`,
+                  ],
+                ].map(([title, desc, to, count]) => (
+                  <Link key={title} to={to} className="card task-card">
+                    <span className="badge">{count}</span>
+                    <h2>{title}</h2>
+                    <p>{desc}</p>
+                    <div className="card-link">
+                      <span>Open section</span>
+                      <ArrowRight size={16} />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+
               <div className="home-lower">
                 <section className="recommend">
                   <div>
@@ -231,7 +408,7 @@ export function App() {
                 </section>
                 <section className="workflow">
                   <span className="eyebrow">HOW WE WORK</span>
-                  <h3>You don’t have to do it alone.</h3>
+                  <h3>Independent, self-directed engineering.</h3>
                   <div className="flow">
                     {[
                       "Learn",
@@ -248,8 +425,8 @@ export function App() {
                     ))}
                   </div>
                   <p>
-                    Practice at your own pace, share what you build, and learn
-                    with the community.
+                    Work independently in your own GitHub repositories, test
+                    against the acceptance criteria and share what you build.
                   </p>
                 </section>
               </div>
@@ -267,55 +444,14 @@ export function App() {
           {page === "task" && (
             <TaskDetail key={param} task={tasks.find((t) => t.id === param)} />
           )}
-          {page === "projects" && (
-            <>
-              <Title
-                eyebrow="BUILD SOMETHING THAT MATTERS"
-                title="Build with TDA."
-                text="Twelve initiatives. Plenty of ways to make a useful contribution. Explore the ideas and choose what interests you."
-              />
-              <div className="project-grid">
-                {initiatives.map((p, i) => {
-                  return (
-                    <article className="card" key={p.id}>
-                      <div className="section-title">
-                        <span className="project-number">
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <span className="badge">Proposed</span>
-                      </div>
-                      <h2>{p.title}</h2>
-                      <p>{p.description}</p>
-                      <p className="muted">
-                        {p.track === "labs" ? "Advanced" : "Mixed experience"}
-                      </p>
-                      <div className="chips">
-                        {p.stack.slice(0, 3).map((s) => (
-                          <span key={s}>{s}</span>
-                        ))}
-                      </div>
-                      <details>
-                        <summary>Deliverables & resources</summary>
-                        <ul>
-                          {p.tasks.map((t) => (
-                            <li key={t.id}>{t.text}</li>
-                          ))}
-                        </ul>
-                        {p.resources.map((r) => (
-                          <p key={r.url}>
-                            <Ext url={r.url}>{r.name}</Ext>
-                          </p>
-                        ))}
-                      </details>
-                      <Link to={`tasks?project=${p.id}`} className="card-link">
-                        Explore contribution tasks <ArrowRight size={16} />
-                      </Link>
-                    </article>
-                  );
-                })}
-              </div>
-            </>
+          {page === "projects" && <ProjectCatalog />}
+          {page === "project" && (
+            <ProjectDetail
+              key={param}
+              project={PROJECT_BLUEPRINTS.find((p) => p.id === param)}
+            />
           )}
+          {page === "explore" && <ExploreLabs />}
           {page === "cp" && <CP />}
           {(page === "resources" || page === "maintainer") && <Resources />}
           {![
@@ -323,6 +459,8 @@ export function App() {
             "learn",
             "task",
             "projects",
+            "project",
+            "explore",
             "cp",
             "maintainer",
             "resources",
@@ -336,10 +474,11 @@ export function App() {
             )}
           <footer>
             <span>
-              <Code2 size={15} /> TDA Coding & Development
+              <Code2 size={15} /> TDA Coding & Development — Engineering
+              Resource Hub
             </span>
             <span>
-              Learn. Build. Contribute.{" "}
+              Learn. Practise. Build. Explore.{" "}
               <span className="footer-year">2026–27</span>
             </span>
           </footer>

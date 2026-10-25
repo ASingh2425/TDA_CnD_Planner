@@ -1,6 +1,17 @@
-# TDA Coding & Development Hub
+# TDA C&D — Engineering Resource Hub
 
-An open learning and project hub for TDA. Every visitor can explore all four tracks, task instructions, twelve project initiatives, resources and algorithm visualizers. There are no accounts, sign-up, assignments, submission forms, approvals or maintainer actions. No database is required.
+An open, self-directed learning and project library for the TDA Coding & Development community.
+
+## Product Scope
+
+- **01. Learn**: 10 core engineering curriculum modules and 6 progressive stages across Programming Fundamentals, Git, DSA, Web Development, Databases, Operating Systems, Networking, Software Engineering, AI/ML and Cybersecurity.
+- **02. Practise**: 31+ self-contained coding exercises with problem statements, constraints, expected output, progressive hints, test cases, step-by-step instructions, deliverables, acceptance criteria, solution references and further challenges.
+- **03. Build**: 12 architectural project blueprints with tech stack recommendations, folder structures, ordered milestones, deliverables, testing checklists and companion exercises.
+- **04. Explore**: 8 advanced engineering research labs covering Bitcask WAL storage engines, bytecode VMs, Hybrid BM25+Vector RAG, BPE tokenizers, Micrograd autodiff, defensive AppSec (XSS/JWT/SSRF), wire protocols and empirical benchmarking.
+- **05. Competitive Programming**: 8 interactive array/window/DP visualisers, an interactive BFS/DFS graph traversal visualiser, a 14-stage CP roadmap, input-constraint-to-complexity tables and 28+ pattern-indexed problems.
+- **Resources**: Searchable and category-filterable library of official specifications, open textbooks, courses, practice platforms and developer tools.
+
+Permanently excluded by design: member accounts, progress tracking, task claiming/assignment, submission forms, mentor review queues and maintainer dashboards.
 
 ## Run locally
 
@@ -21,15 +32,4 @@ npm run test:e2e
 npm run build
 ```
 
-Playwright uses Microsoft Edge. Deploy the generated dist directory using Vercel’s Vite preset (npm run build). No environment variables or database setup are needed.
-
-## Content
-
-- src/data.ts: four learning tracks, six stages, practice tasks and canonical problem links.
-- src/initiatives.json: all twelve original initiatives and 48 milestone definitions.
-- src/Resources.tsx: searchable public resource library and strategic roadmap.
-- archive/original.html: original planner preserved verbatim for reference, not the running site.
-
-The six sections are Start Here, Learning Paths, Explore Tasks, Build with TDA, Competitive Programming and Resources. The old maintainer URL opens Resources for compatibility. Tasks are self-directed exercises, not assignments. Topic prerequisites are guidance, not access restrictions.
-
-See docs/ARCHITECTURE.md, docs/CONTENT_GUIDE.md and docs/DEPLOYMENT.md for maintenance and handover.
+Playwright uses Microsoft Edge. Deploy the generated `dist` directory using Vercel’s Vite preset (`npm run build`). No environment variables or database setup are needed.
