@@ -27,10 +27,17 @@ describe("preserved and expanded catalog", () => {
     expect(stages).toHaveLength(6);
   });
 
-  it("tasks have unique IDs, valid projects, deep implementation fields and actionable criteria", () => {
-    expect(tasks.length).toBeGreaterThanOrEqual(30);
+  it("tasks have unique IDs, valid projects, 3 learning levels, deep pedagogical fields and actionable criteria", () => {
+    expect(tasks.length).toBeGreaterThanOrEqual(40);
     const taskIds = new Set(tasks.map((t) => t.id));
     expect(taskIds.size).toBe(tasks.length);
+
+    const level1Count = tasks.filter((t) => t.level === "Level 1: Start from zero").length;
+    const level2Count = tasks.filter((t) => t.level === "Level 2: Practise by building").length;
+    const level3Count = tasks.filter((t) => t.level === "Level 3: Explore real engineering").length;
+    expect(level1Count).toBeGreaterThanOrEqual(10);
+    expect(level2Count).toBeGreaterThanOrEqual(7);
+    expect(level3Count).toBeGreaterThanOrEqual(20);
 
     for (const t of tasks) {
       expect(initiatives.some((p) => p.id === t.initiative_id)).toBe(true);
@@ -39,6 +46,11 @@ describe("preserved and expanded catalog", () => {
       expect(t.overview.length).toBeGreaterThan(40);
       expect(t.problemStatement.length).toBeGreaterThan(40);
       expect(t.objectives.length).toBeGreaterThanOrEqual(2);
+      expect(t.conceptExplanation.length).toBeGreaterThan(30);
+      expect(t.workedExample.code.length).toBeGreaterThan(10);
+      expect(t.workedExample.lineByLine.length).toBeGreaterThanOrEqual(2);
+      expect(t.guidedActivity.length).toBeGreaterThan(20);
+      expect(t.milestones.length).toBeGreaterThanOrEqual(3);
       expect(t.constraints.length).toBeGreaterThanOrEqual(1);
       expect(t.testCases.length).toBeGreaterThanOrEqual(1);
       expect(t.hints.length).toBeGreaterThanOrEqual(1);

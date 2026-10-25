@@ -35,13 +35,26 @@ test("tasks filter, show empty states and expose deliverables", async ({
     .filter({ hasText: "Make your first pull request" })
     .click();
   await expect(
+    page.getByRole("heading", { name: "What you’ll learn" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Understand the concept" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Your turn" }),
+  ).toBeVisible();
+  await expect(
     page.getByRole("heading", { name: "What you’ll deliver" }),
   ).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "What success looks like" }),
   ).toBeVisible();
+  await page.goto("/#/task/cli-task-manager");
   await expect(
-    page.getByRole("heading", { name: "Problem statement" }),
+    page.getByText("1. Understand the idea"),
+  ).toBeVisible();
+  await expect(
+    page.getByText("6. Unlock the next challenge"),
   ).toBeVisible();
 });
 

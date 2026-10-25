@@ -66,7 +66,7 @@ export function App() {
   const quickTasks = qNorm
     ? tasks
         .filter((t) =>
-          `${t.title} ${t.description} ${t.category} ${t.skills.join(" ")}`
+          `${t.title} ${t.description} ${t.category} ${t.level} ${t.skills.join(" ")}`
             .toLowerCase()
             .includes(qNorm),
         )
@@ -144,8 +144,8 @@ export function App() {
             {nav.find((n) => n[0] === page)?.[1] ??
               (page === "project" ? "Project blueprint" : "Task details")}
           </div>
-          <Link to="learn" className="button secondary small">
-            Explore all tracks <ArrowUpRight size={14} />
+          <Link to="tasks?level=1" className="button secondary small">
+            Start from zero (Level 1) <ArrowUpRight size={14} />
           </Link>
         </header>
         <main id="main" tabIndex={-1}>
@@ -153,9 +153,8 @@ export function App() {
             <span className="dot" />
             Open engineering library
             <span>
-              {CURRICULUM_MODULES.length} tracks · {tasks.length} exercises ·{" "}
-              {PROJECT_BLUEPRINTS.length} blueprints · {ENGINEERING_LABS.length}{" "}
-              labs · {CP_PROBLEMS.length} CP problems
+              Level 1 (Start from zero) · Level 2 (Practise by building) · Level
+              3 (Real engineering)
             </span>
           </div>
           {page === "home" && (
@@ -171,17 +170,17 @@ export function App() {
                     starts <em>here.</em>
                   </h1>
                   <p>
-                    An open, self-directed learning and project library for the
-                    TDA Coding & Development community.
-                    <br className="desktop" /> Explore roadmaps, practise coding
-                    exercises, build guided projects and run engineering labs.
+                    Never built a project before? Start from zero with friendly,
+                    bite-sized exercises that explain every concept in plain
+                    English — then grow at your own pace into real software
+                    engineering.
                   </p>
                   <div className="actions">
-                    <Link to="learn/0" className="button">
-                      Find my starting point <ArrowRight size={17} />
+                    <Link to="task/print-your-name" className="button">
+                      Start from zero (Exercise #1) <ArrowRight size={17} />
                     </Link>
-                    <Link to="tasks" className="button secondary">
-                      Browse {tasks.length} exercises
+                    <Link to="tasks?level=1" className="button secondary">
+                      Browse Level 1 beginner tasks
                     </Link>
                   </div>
                 </div>
@@ -201,13 +200,216 @@ export function App() {
                 </div>
               </div>
 
-              <section className="card hub-search-box">
+              <div className="section-title">
+                <div>
+                  <span className="eyebrow">MAKE IT YOURS</span>
+                  <h2>Where are you starting?</h2>
+                </div>
+                <span className="muted">Different paths. One community.</span>
+              </div>
+              <div className="entry-grid">
+                {[
+                  [
+                    GraduationCap,
+                    "I’m new to development.",
+                    "I’m completely new — start with programming basics, one concept at a time.",
+                    "Start learning",
+                    "learn/0",
+                    "mint",
+                  ],
+                  [
+                    Code2,
+                    "I know the basics.",
+                    "I know a little coding — practise fundamentals by building small apps.",
+                    "Find a build task",
+                    "tasks?level=2",
+                    "blue",
+                  ],
+                  [
+                    Trophy,
+                    "I want to compete.",
+                    "Build your problem-solving skills, one pattern at a time.",
+                    "Enter the CP track",
+                    "cp",
+                    "peach",
+                  ],
+                  [
+                    GitPullRequest,
+                    "I’m ready to contribute.",
+                    "Find a scoped exercise or guided project and start building.",
+                    "Explore open tasks",
+                    "tasks",
+                    "purple",
+                  ],
+                ].map(([Icon, title, desc, cta, to, color]) => {
+                  const I = Icon as typeof Code2;
+                  return (
+                    <Link
+                      to={to as string}
+                      key={title as string}
+                      className={`entry ${color}`}
+                    >
+                      <div className="entry-top">
+                        <span className="icon-box">
+                          <I size={23} />
+                        </span>
+                        <ArrowUpRight size={18} />
+                      </div>
+                      <h3>{title as string}</h3>
+                      <p>{desc as string}</p>
+                      <strong>
+                        {cta as string}
+                        <ArrowRight size={15} />
+                      </strong>
+                    </Link>
+                  );
+                })}
+              </div>
+
+              <div className="section-title" style={{ marginTop: 32 }}>
+                <div>
+                  <span className="eyebrow">CLEAR PROGRESSION</span>
+                  <h2>Three levels of learning</h2>
+                </div>
+                <span className="muted">
+                  Small wins early · Real engineering when you’re ready
+                </span>
+              </div>
+
+              <div className="level-home-grid">
+                <article className="card level-card-home">
+                  <span className="badge">Level 1 · Start from zero</span>
+                  <h2>No project experience required</h2>
+                  <p>
+                    Each exercise teaches one or two concepts at a time with a
+                    plain-English explanation and a tiny worked example:
+                  </p>
+                  <ul>
+                    <li>
+                      <Link to="task/print-your-name">
+                        Print your name on the screen
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="task/variables-and-calculator">
+                        Create a simple calculator
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="task/number-guessing-game">
+                        Write a number-guessing game
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="task/functions-reusable-blocks">
+                        Practise variables, conditions, loops and functions
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="task/first-html-css-page">
+                        Make a personal webpage with HTML and CSS
+                      </Link>
+                    </li>
+                  </ul>
+                  <div className="card-link">
+                    <Link to="tasks?level=1">
+                      Open all Level 1 exercises <ArrowRight size={16} />
+                    </Link>
+                  </div>
+                </article>
+
+                <article className="card level-card-home">
+                  <span className="badge">Level 2 · Practise by building</span>
+                  <h2>For students who know the basics</h2>
+                  <p>
+                    Each project combines familiar concepts and introduces one
+                    practical new skill at a time:
+                  </p>
+                  <ul>
+                    <li>
+                      <Link to="task/cli-task-manager">
+                        Build your first command-line task manager
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="task/todo-list-web">
+                        Build an interactive To-Do list webpage
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="task/quiz-application">
+                        Create a multiple-choice quiz application
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="task/weather-data-fetcher">
+                        Fetch and display live weather data
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="task/expense-tracker">
+                        Build a small personal expense tracker
+                      </Link>
+                    </li>
+                  </ul>
+                  <div className="card-link">
+                    <Link to="tasks?level=2">
+                      Open all Level 2 exercises <ArrowRight size={16} />
+                    </Link>
+                  </div>
+                </article>
+
+                <article className="card level-card-home">
+                  <span className="badge">
+                    Level 3 · Explore real engineering
+                  </span>
+                  <h2>For students ready for a challenge</h2>
+                  <p>
+                    Ambitious destinations to work toward once you’ve mastered
+                    the fundamentals:
+                  </p>
+                  <ul>
+                    <li>
+                      <Link to="task/semver-dependency-resolver">
+                        Semantic version (SemVer) range parser
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="task/wal-append-storage-engine">
+                        Bitcask Write-Ahead Log storage engine
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="task/bytecode-stack-vm">
+                        Lexer, parser and bytecode virtual machine
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="task/vector-cosine-retriever">
+                        Hybrid BM25 + Vector RAG retrieval system
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="explore">
+                        Cybersecurity labs & performance benchmarking
+                      </Link>
+                    </li>
+                  </ul>
+                  <div className="card-link">
+                    <Link to="tasks?level=3">
+                      Open all Level 3 challenges <ArrowRight size={16} />
+                    </Link>
+                  </div>
+                </article>
+              </div>
+
+              <section className="card hub-search-box" style={{ marginTop: 24 }}>
                 <label className="search-label">
                   Search across all exercises, project blueprints and labs
                   <input
                     value={hubQuery}
                     onChange={(e) => HQ(e.target.value)}
-                    placeholder="Search e.g. Binary Search, HTTP/1.1, SQL, RAG, XSS, Docker, Knapsack…"
+                    placeholder="Try calculator, guessing game, to-do list, weather, Git, Binary Search…"
                   />
                 </label>
                 {qNorm && (
@@ -218,9 +420,9 @@ export function App() {
                         to={`task/${t.id}`}
                         className="quick-result-item"
                       >
-                        <span className="badge">Exercise · {t.difficulty}</span>
+                        <span className="badge">{t.level}</span>
                         <strong>{t.title}</strong>
-                        <span className="muted">{t.category}</span>
+                        <span className="muted">{t.durationLabel}</span>
                       </Link>
                     ))}
                     {quickProjects.map((p) => (
@@ -259,76 +461,10 @@ export function App() {
                 )}
               </section>
 
-              <div className="section-title">
-                <div>
-                  <span className="eyebrow">MAKE IT YOURS</span>
-                  <h2>Where are you starting?</h2>
-                </div>
-                <span className="muted">Different paths. One community.</span>
-              </div>
-              <div className="entry-grid">
-                {[
-                  [
-                    GraduationCap,
-                    "I’m new to development.",
-                    "Start with programming, Git and your first small win.",
-                    "Start learning",
-                    "learn/0",
-                    "mint",
-                  ],
-                  [
-                    Code2,
-                    "I know the basics.",
-                    "Turn what you know into something people can use.",
-                    "Find a build task",
-                    "tasks?track=Software%20Development",
-                    "blue",
-                  ],
-                  [
-                    Trophy,
-                    "I want to compete.",
-                    "Build your problem-solving skills, one pattern at a time.",
-                    "Enter the CP track",
-                    "cp",
-                    "peach",
-                  ],
-                  [
-                    GitPullRequest,
-                    "I’m ready to contribute.",
-                    "Find a scoped task and make your first contribution.",
-                    "Explore open tasks",
-                    "tasks",
-                    "purple",
-                  ],
-                ].map(([Icon, title, desc, cta, to, color]) => {
-                  const I = Icon as typeof Code2;
-                  return (
-                    <Link
-                      to={to as string}
-                      key={title as string}
-                      className={`entry ${color}`}
-                    >
-                      <div className="entry-top">
-                        <span className="icon-box">
-                          <I size={23} />
-                        </span>
-                        <ArrowUpRight size={18} />
-                      </div>
-                      <h3>{title as string}</h3>
-                      <p>{desc as string}</p>
-                      <strong>
-                        {cta as string}
-                        <ArrowRight size={15} />
-                      </strong>
-                    </Link>
-                  );
-                })}
-              </div>
-
               <div className="section-title" style={{ marginTop: 32 }}>
                 <div>
                   <span className="eyebrow">THE FIVE PILLARS</span>
-                  <h2>How the Resource Hub is structured</h2>
+                  <h2>Explore the full library</h2>
                 </div>
                 <span className="muted">
                   Self-contained guides · Zero account locks
@@ -344,7 +480,7 @@ export function App() {
                   ],
                   [
                     "02. Practise",
-                    "Exercises organised by topic and difficulty, with problem statements, hints, expected output, constraints, test cases and solution references.",
+                    "Exercises organised across Level 1, Level 2 and Level 3 with concept explanations, worked examples, progressive hints and test cases.",
                     "tasks",
                     `${tasks.length} practical exercises`,
                   ],
@@ -382,18 +518,18 @@ export function App() {
               <div className="home-lower">
                 <section className="recommend">
                   <div>
-                    <span className="eyebrow">YOUR RECOMMENDED NEXT STEP</span>
+                    <span className="eyebrow">YOUR RECOMMENDED FIRST STEP</span>
                     <h2>
-                      {recommended?.title ?? "Explore the learning paths"}
+                      {recommended?.title ?? "Print your name on the screen"}
                     </h2>
                     <p>
                       {recommended?.description ??
-                        "Start with the foundations and choose a practical exercise."}
+                        "Write and run your very first program in 15 minutes."}
                     </p>
                     <div className="chips">
-                      <span>{recommended?.difficulty ?? "Beginner"}</span>
-                      <span>{recommended?.effort ?? 2} hours</span>
-                      <span>Practical exercise</span>
+                      <span>{recommended?.level ?? "Level 1: Start from zero"}</span>
+                      <span>{recommended?.durationLabel ?? "15–25 minutes"}</span>
+                      <span>No experience needed</span>
                     </div>
                     <Link
                       to={recommended ? `task/${recommended.id}` : "learn"}
@@ -407,16 +543,16 @@ export function App() {
                   </div>
                 </section>
                 <section className="workflow">
-                  <span className="eyebrow">HOW WE WORK</span>
-                  <h3>Independent, self-directed engineering.</h3>
+                  <span className="eyebrow">HOW EVERY EXERCISE WORKS</span>
+                  <h3>Every exercise teaches before it tests.</h3>
                   <div className="flow">
                     {[
-                      "Learn",
-                      "Pick a task",
-                      "Build",
-                      "Test",
-                      "Share",
-                      "Improve",
+                      "Understand",
+                      "Tiny example",
+                      "Small change",
+                      "Your turn",
+                      "Check result",
+                      "Next step",
                     ].map((s, i) => (
                       <span key={s}>
                         <b>{String(i + 1).padStart(2, "0")}</b>
@@ -425,8 +561,8 @@ export function App() {
                     ))}
                   </div>
                   <p>
-                    Work independently in your own GitHub repositories, test
-                    against the acceptance criteria and share what you build.
+                    Understand the concept in plain English, run a tiny example,
+                    make one small change, and build confidence step by step.
                   </p>
                 </section>
               </div>
